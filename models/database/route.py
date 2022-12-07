@@ -1,5 +1,5 @@
 routeData = [
-    {'id': 'route0', 'mcpIDs': ['mcp0', 'mcp4', 'mcp2', 'mcp7'], 'color': '#00d8ff', 'coordinates': [
+    {'id': 'route0', 'mcpIDs': ['mcp0', 'mcp4', 'mcp2', 'mcp7'], 'color': '#00d8ff', 'available': 1, 'coordinates': [
         [106.8024652, 10.8790426],  # mcp0
         [106.80474, 10.88212],  # ngã tư 1
         [106.807379, 10.8805597],  # mcp4
@@ -12,7 +12,7 @@ routeData = [
         [106.80474, 10.88212],  # ngã tư 1
         [106.8024652, 10.8790426],  # mcp0
     ]},
-    {'id': 'route1', 'mcpIDs': ['mcp0', 'mcp3', 'mcp5', 'mcp6'], 'color': '#e1ff00', 'coordinates': [
+    {'id': 'route1', 'mcpIDs': ['mcp0', 'mcp3', 'mcp5', 'mcp6'], 'color': '#e1ff00', 'available': 1, 'coordinates': [
         [106.8024652, 10.8790426],  # mcp0
         [106.8007701, 10.8830251],  # mcp6
         [106.8024652, 10.8790426],  # mcp0

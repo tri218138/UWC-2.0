@@ -7,6 +7,8 @@ from controllers.main_controller import TOKEN, defineToken
 backofficer_bp = Blueprint('backofficer_bp', __name__,
                            template_folder="./views")
 
+backofficer_bp.register_blueprint(task_bp, url_prefix='/task')
+
 @backofficer_bp.before_request
 def auth():
     if request.endpoint == 'main_bp.login':
@@ -70,9 +72,7 @@ def member():
                              header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
 
-
-backofficer_bp.register_blueprint(task_bp, url_prefix='/task')
-
+# #################################################
 
 @backofficer_bp.route('/assign-task', methods=['GET', 'POST'])
 def assignTask():
@@ -86,7 +86,7 @@ def createRoute():
         postData = request.form.to_dict(False)
         if 'create-route' in postData:
             data["step"] = postData['create-route'][0]
-    data["mcp"] = dbms.selectMCP()
+    data["mcp"] = dbms.selectMCPforView()
     data["route"] = dbms.selectRoute()
 
     step = data.pop("step", "overview")

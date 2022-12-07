@@ -18,7 +18,7 @@ def auth():
 @mcp_bp.route('/view', methods=['GET', 'POST'])
 def view():
     data = {}
-    data['mcp'] = dbms.selectMCP()
+    data['mcp'] = dbms.selectMCPforView()
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html', role = "backofficer")
     header = render_template('layout/header.html')
