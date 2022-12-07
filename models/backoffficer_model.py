@@ -16,4 +16,10 @@ class DBMS:
             if c["id"] == id:
                 return c
         return None
+    def saveEmployeeInformation(self, id, data):
+        for c in Database["employee"]:
+            if c["id"] == id:
+                for key in c:
+                    if key in data:
+                        c[key] = data[key]
 dbms = DBMS()

@@ -1,16 +1,20 @@
 {% set role = request.blueprint.split('.')[0][:-3] %}
 
+{% if role in ["backofficer"] %}
+
 <div style="display:flex; justify-content: space-around;">
     <div class="card" style="width: 10rem;">
         <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/5868/5868069.png" alt="Card image cap">
         <div class="card-body" style="text-align: center;">
-            <a href="/assign-task/mcp" class="btn btn-primary" style="background-color: green;">MCP</a>
+            <a href="/{{role}}/task/asign/mcp" class="btn btn-primary" style="background-color: green;">MCP</a>
         </div>
     </div>
     <div class="card" style="width: 10rem;">
         <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/2007/2007295.png" alt="Card image cap">
         <div class="card-body" style="text-align: center;">
-            <a href="#" class="btn btn-primary" style="background-color: green;">Lộ trình</a>
+            <a href="/{{role}}/task/asign/route" class="btn btn-primary" style="background-color: green;">Lộ trình</a>
         </div>
     </div>
 </div>
+
+{% endif %}

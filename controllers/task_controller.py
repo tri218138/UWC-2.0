@@ -16,3 +16,11 @@ def assign():
     selection = render_template('components/assign-task.html')
     layout = render_template('layout/layout.html', header= header, sidebar=sidebar, content = selection)
     return render_template('index.html', content=layout)
+
+@task_bp.route('/assign/mcp', methods=['GET', 'POST'])
+def assignMCP():
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html', role = "backofficer")
+    selection = render_template('components/assign-task.html')
+    layout = render_template('layout/layout.html', header= header, sidebar=sidebar, content = selection)
+    return render_template('index.html', content=layout)

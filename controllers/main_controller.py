@@ -24,7 +24,7 @@ def auth():
     if request.endpoint == 'main_bp.login':        
         return 
     if 'idlogin' not in session:
-        return redirect('login')
+        return redirect('/login', code=302)
     global auth
     exists, auth = defineToken(session['idlogin'])
     if not exists:
@@ -44,6 +44,13 @@ def login():
     loginPage = render_template('pages/login.html')
     return render_template('index.html', content=loginPage)
 
+@main_bp.route('/', methods=['GET', 'POST'])
+@main_bp.route('/home', methods=['GET', 'POST'])
+def home():
+    if 'idlogin' not in session:
+        return redirect('/login', code=302)
+    return redirect(url_for(f'{auth["role"]}_bp.home'))
+
 @main_bp.route('/logout')
 def logout():
     session.clear()
@@ -51,9 +58,13 @@ def logout():
 
 @main_bp.errorhandler(404)
 def page_not_found(e):
+    if 'idlogin' not in session:
+        return redirect('/login', code=302)
     return render_template('error/404.html'), 404
 
 @main_bp.app_errorhandler(404)
 def page_not_found(e):
+    if 'idlogin' not in session:
+        return redirect('/login', code=302)
     err = render_template('error/404.html')
     return render_template('index.html', content=err)

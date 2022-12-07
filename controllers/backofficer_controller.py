@@ -115,10 +115,10 @@ def personalInfomation():
     elif request.method == "POST":
         req = request.form.to_dict()
         if req["request"] == "save":
-            dbms.saveUserName(auth["username"], data=req)
-            return redirect(url_for("manager_bp.personalInfomation"))
+            dbms.saveEmployeeInformation(auth["idlogin"], data=req)
+            return redirect(url_for("backofficer_bp.personalInfomation"))
         elif req["request"] == "cancel":
-            return redirect(url_for("manager_bp.personalInfomation"))
+            return redirect(url_for("backofficer_bp.personalInfomation"))
 
     layout = render_template('layout/layout.html',header=header, content=container)
     return render_template('index.html', content=layout)
