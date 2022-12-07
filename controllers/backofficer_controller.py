@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, session, redirect, url_fo
 from controllers.task_controller import task_bp
 from controllers.mcp_controller import mcp_bp
 from models.backoffficer_model import dbms
+import calendar, datetime
 from controllers.main_controller import TOKEN, defineToken
 
 backofficer_bp = Blueprint('backofficer_bp', __name__,
@@ -97,6 +98,24 @@ def createRoute():
 
     operator = render_template('layout/operator.html', type='create-route')
     layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=mcp, operator= operator)
+    return render_template('index.html', content=layout)
+
+@backofficer_bp.route('/schedule', methods=['GET','POST'])
+def schedule():
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html')
+
+    data = {}
+    today = datetime.datetime.today()
+    data["calendar"] = calendar.monthcalendar(today.year, today.month)
+    if request.method == 'GET':
+        req = request.args.to_dict()
+        if 'datepicker' in req:
+            data["assigned"] = dbms.selectScheduleInDate(req["datepicker"])
+
+    content = render_template('components/datepicker.html', data = data)
+
+    layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
 
 @backofficer_bp.route('/profile', methods=['GET','POST'])

@@ -45,20 +45,18 @@ def assignMCP():
         if req["option"][0] == 'assign':
             today = datetime.datetime.today()
             if "mcp" in req and "janitor" in req:
-                pairs = {
+                data = {
                     "mcp" : req["mcp"], # ["mcpx"]
                     "janitor" : req["janitor"], # ["13132","31231"]
-                    "date": f"{datepicker}/{today.month}/{today.year}",
-                    "shift" : shift
+                    "date": [f"{datepicker}"],
+                    "shift" : [shift]
                 }
-                dbms.assignJanitor2MCP(pairs)
+                dbms.assignJanitor2MCP(data)
         elif req["option"][0] == 'delete':
             if "mcp" in req and "janitor" in req:
                 pair = {
                     "mcp" : req["mcp"][0], # mcpx
-                    "janitor" : req["janitor"][0], #312323
-                    "date": f"{datepicker}/{today.month}/{today.year}",
-                    "shift" : shift
+                    "janitor" : req["janitor"][0] #312323
                 }
                 dbms.removeWorkAssignedJanitor2MCP(pair)
 

@@ -52,18 +52,18 @@ class DBMS:
                 for key in c:
                     if key in data:
                         c[key] = data[key]
-    def assignJanitor2MCP(self, pairs):
+    def assignJanitor2MCP(self, data):
         for d in Database["employee"]:
-            if d["id"] in pairs["janitor"]:
+            if d["id"] in data["janitor"]:
                 d["state"] = "bận"
         for d in Database["mcp"]:
-            if d["id"] in pairs["mcp"]:
+            if d["id"] in data["mcp"]:
                 d["available"] = 0
-        pairs = [
-            { "mcp": pairs["mcp"][0], "janitor": pairs["janitor"][i] } for i in range(len(pairs["janitor"]))
+        data = [
+            { "mcp": data["mcp"][0], "date": data["date"][0], "shift": data["shift"][0], "janitor": data["janitor"][i] } for i in range(len(data["janitor"]))
         ]
 
-        return Database["schedule"]["janitor"].extend(pairs)
+        return Database["schedule"]["janitor"].extend(data)
     def removeWorkAssignedJanitor2MCP(self, pair):
         print(Database["schedule"]["janitor"])
         print(pair)
@@ -78,4 +78,12 @@ class DBMS:
                         mcp['available'] += 1
                 Database["schedule"]["janitor"].remove(p)
                 break
+    
+    def selectScheduleInDate(self, date):
+        ret = {}
+        ret["janitor"] = []
+        for d in Database["schedule"]["janitor"]:
+            if d["date"] == date:
+                ret["janitor"].append(d)
+        return ret
 dbms = DBMS()
