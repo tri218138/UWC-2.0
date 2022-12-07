@@ -11,8 +11,9 @@ class DBMS:
         return Database["mcp"]
     def selectRoute(self):
         return Database["route"]
-    def selectUserProfile(self):
+    def selectUserProfile(self, id):
         for c in Database["employee"]:
-            if c["username"] == "":
+            if c["id"] == id:
                 return c
+        return None
 dbms = DBMS()

@@ -1,4 +1,6 @@
 employeeData = [
+    {'id': '01393123', 'lname': 'Nguyễn Sinh', 'fname': 'Tùng',
+        'role': 'backofficer', 'state': 'sẵn sàng', 'phone': '0913133132'},
     {'id': '01392183', 'lname': 'Đoàn Văn', 'fname': 'Hậu',
         'role': 'janitor', 'state': 'sẵn sàng', 'phone': '0913133132'},
     {'id': '341314341', 'lname': 'Nguyễn Quyết', 'fname': 'Chiến',

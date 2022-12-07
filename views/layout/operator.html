@@ -1,3 +1,6 @@
+{% set role = request.blueprint.split('.')[0][:-3] %}
+<!-- {% print role %} # customer -->
+{% if role in ["backofficer"] %}
 {% if type == 'task-assign-mcp' %}
 
 <input type="submit" class="btn btn-primary btn-lg" form="assign-task-mcp" value="Lưu">
@@ -7,4 +10,5 @@
     <input type="submit" class="btn btn-primary btn-lg" style="width: 100%" name="create-route" value="separate-field">
     <input type="submit" class="btn btn-primary btn-lg" style="width: 100%" name="create-route" value="find-optimized-route">
 </form>
+{% endif %}
 {% endif %}

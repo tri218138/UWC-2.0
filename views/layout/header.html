@@ -1,5 +1,5 @@
-{% set role = request.blueprint[:-3] %}
-<!-- {% print role %} # customer -->
+{% set role = request.blueprint.split('.')[0][:-3] %}
+<!-- {% print role %} -->
 {% if role in ["janitor","collector","backofficer"] %}
 
 <header>
@@ -61,7 +61,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="/{{role}}/profile">Thông tin cá nhân</a>
                         <!-- <a class="dropdown-item" href="/{{role}}/setting">Cài đặt</a> -->
-                        <a class="dropdown-item" href="/{{role}}/logout">Đăng xuất</a>
+                        <a class="dropdown-item" href="/logout">Đăng xuất</a>
                     </div>
                 </div>
             </div>

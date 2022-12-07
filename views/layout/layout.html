@@ -1,3 +1,4 @@
+{% set role = request.blueprint.split('.')[0][:-3] %}
 {{header | safe}}
 <div class="row">
     <div class="col-sm-2" style="position: relative; overflow-y: scroll; height: 85vh;">

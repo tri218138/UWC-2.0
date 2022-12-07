@@ -25,7 +25,7 @@ def auth():
 # @login_required
 def home():
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role="backofficer")
+    sidebar = render_template('layout/sidebar.html')
     content = render_template('layout/layout.html',
                               header=header, sidebar=sidebar)
     return render_template('index.html', content=content)
@@ -36,14 +36,16 @@ def page_not_found(e):
     return redirect(url_for('backofficer_bp.home'))
 
 
+
+
 @backofficer_bp.route('/vehicle', methods=['GET', 'POST'])
 # @login_required
 def vehicle():
     data = dbms.selectVehicle()
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role="backofficer")
+    sidebar = render_template('layout/sidebar.html')
     content = render_template(
-        'components/vehicle.html', role="backofficer", data=data)
+        'components/vehicle.html', data=data)
     layout = render_template('layout/layout.html',
                              header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
@@ -61,7 +63,7 @@ def mcp():
 def member():
     data = dbms.selectEmployee()
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role="backofficer")
+    sidebar = render_template('layout/sidebar.html')
     content = render_template('components/member.html',
                               role="backofficer", data=data)
     layout = render_template('layout/layout.html',
@@ -89,18 +91,20 @@ def createRoute():
 
     step = data.pop("step", "overview")
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role="backofficer")
+    sidebar = render_template('layout/sidebar.html')
 
-    mcp = render_template('components/mcp.html', role="backofficer", data= data, step = step)
+    mcp = render_template('components/mcp.html', data= data, step = step)
 
-    operator = render_template('layout/operator.html', role="backofficer", type='create-route')
+    operator = render_template('layout/operator.html', type='create-route')
     layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=mcp, operator= operator)
     return render_template('index.html', content=layout)
 
 @backofficer_bp.route('/profile', methods=['GET','POST'])
 def personalInfomation():
     header = render_template('layout/header.html')
-    data = dbms.selectUserProfile(auth["username"])
+    sidebar = render_template('layout/sidebar.html')
+    data = dbms.selectUserProfile(auth["idlogin"])
+    data["name"] = data["lname"] + " " +  data["fname"]
     container = render_template('pages/profile.html', data=data)
     if request.method == "GET":
         req = request.args.to_dict()
@@ -115,5 +119,6 @@ def personalInfomation():
             return redirect(url_for("manager_bp.personalInfomation"))
         elif req["request"] == "cancel":
             return redirect(url_for("manager_bp.personalInfomation"))
-    content = render_template('layout/container.html', header=header, container=container if container is not None else "")
-    return render_template('index.html', content=content)  
+
+    layout = render_template('layout/layout.html',header=header, content=container)
+    return render_template('index.html', content=layout)

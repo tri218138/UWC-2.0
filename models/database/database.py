@@ -3,6 +3,7 @@ from models.database.mcp import MCPData
 from models.database.route import routeData
 from models.database.schedule import pairWorkData
 from models.database.vehicle import vehicleData
+from models.database.authentication import authData
 
 Database = {
     "employee": employeeData,
@@ -10,4 +11,5 @@ Database = {
     "route": routeData,
     "schedule": pairWorkData,
     "vehicle": vehicleData,
+    "authentication": authData
 }
