@@ -1,0 +1,10 @@
+{% if type == 'task-assign-mcp' %}
+
+<input type="submit" class="btn btn-primary btn-lg" form="assign-task-mcp" value="Lưu">
+
+{% elif type == 'create-route' %}
+<form action="{{request.url}}" method="post" id="create-route">
+    <input type="submit" class="btn btn-primary btn-lg" style="width: 100%" name="create-route" value="separate-field">
+    <input type="submit" class="btn btn-primary btn-lg" style="width: 100%" name="create-route" value="find-optimized-route">
+</form>
+{% endif %}

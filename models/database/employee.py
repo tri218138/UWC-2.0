@@ -1,0 +1,18 @@
+employeeData = [
+    {'id': '01392183', 'lname': 'Đoàn Văn', 'fname': 'Hậu',
+        'role': 'janitor', 'state': 'sẵn sàng', 'phone': '0913133132'},
+    {'id': '341314341', 'lname': 'Nguyễn Quyết', 'fname': 'Chiến',
+     'role': 'janitor', 'state': 'sẵn sàng', 'phone': '0913133132'},
+    {'id': '341314332', 'lname': 'Cao Ly', 'fname': 'Simba',
+     'role': 'janitor', 'state': 'sẵn sàng', 'phone': '0913133132'},
+    {'id': '636373', 'lname': 'Cao Ly', 'fname': 'Simba',
+     'role': 'janitor', 'state': 'sẵn sàng', 'phone': '0913133132'},
+    {'id': '0597483', 'lname': 'Cao Ly', 'fname': 'Simba',
+     'role': 'janitor', 'state': 'sẵn sàng', 'phone': '0913133132'},
+    {'id': '341s56436', 'lname': 'Ngô Quý', 'fname': 'Đăng',
+     'role': 'collector', 'state': 'sẵn sàng', 'phone': '0913133132'},
+    {'id': '5045335', 'lname': 'Ngô Quý', 'fname': 'Ngõ',
+     'role': 'collector', 'state': 'sẵn sàng', 'phone': '0913133132'},
+    {'id': '135544', 'lname': 'Gia Quý', 'fname': 'Bình',
+     'role': 'collector', 'state': 'sẵn sàng', 'phone': '0913133132'},
+]
