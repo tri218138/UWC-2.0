@@ -1,48 +1,88 @@
-<h1>Xe tải</h1>
+{% for row in data %}
+<h2 style="text-transform: capitalize">{{row[0]['type']}}</h2>
 <table class="table table-hover">
     <thead>
         <tr>
             {% if role == 'backofficer' %}
-                <th scope="col">#</th>
-                <th scope="col">Biển kiểm soát</th>
-                <th scope="col">Trạng thái</th>
+            <th scope="col">Mã số</th>
+            <th scope="col">Biển kiểm soát</th>
+            <th scope="col">Trạng thái</th>
+            <th scope="col">Hàng động</th>
             {% else %}
             {% endif %}
         </tr>
     </thead>
     <tbody>
         {% if role == 'backofficer' %}
-            {% for i in range(data|length) %}
-                <tr>
-                    <!-- <form action="/order" method="post" id="orderID:{{data[i]['orderID']}}">
-                        <input class="form-control form-control-sm" type="hidden" name="orderID" value="{{data[i]['orderID']}}">
-                    </form> -->
-                    <th scope="row">{{i}}</th>
-                    <td>{{data[i]['id']}}</td>
-                    {% if data[i]['state'] == "sẵn sàng" %}
-                        <td style="color: green;">{{data[i]['state']}}</td>
-                    {% else %}
-                        <td style="color: red;">{{data[i]['state']}}</td>
-                    {% endif %}
-                    <!-- <td><button class="btn" type="submit" form="orderID:{{data[i]['orderID']}}"><i class="fa-solid fa-trash"></i></button></td> -->
-                </tr>
-            {% endfor %}
+        {% for i in range(row|length) %}
+        <tr>
+            <th scope="row">{{i}}</th>
+            <td>{{row[i]['id']}}</td>
+            {% if row[i]['state'] == "sẵn sàng" %}
+            <td style="color: green;" contenteditable="true">{{row[i]['state']}}</td>
+            {% else %}
+            <td style="color: red;" contenteditable="true">{{row[i]['state']}}</td>
+            {% endif %}
+            <td>
+                <button class="btn btn-primary" onclick="handleChangeState(`{{row[i]['id']}}`)">Đổi trạng thái</button>
+                <button class="btn btn-danger" onclick="handleDel(`{{row[i]['id']}}`)">Xoá</button>
+            </td>
+        </tr>
+        {% endfor %}
         {% else %}
-            <!-- {% for i in range(data|length) %}
-                <tr>
-                    <th scope="row">{{i}}</th>
-                    <td>{{data[i]['orderID']}}</td>
-                    <td>{{data[i]['design']}}</td>
-                    <td>{{data[i]['exterior']}}</td>
-                    <td>{{data[i]['interior']}}</td>
-                    <td>{{data[i]['orderTime']}}</td>
-                </tr>
-            {% endfor %} -->
         {% endif %}
     </tbody>
 </table>
 
-<h1>Xe kutkit</h1>
+{% endfor %}
+<button class="btn btn-success" onclick="handleAdd()">Thêm phương tiện</button>
+
+<script>
+    async function handleChangeState(id) {
+        await fetch('http://127.0.0.1:5000/backofficer/vehicle', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'update',
+                id: id})
+        }).then(() => window.location.reload());
+    }
+
+    async function handleDel(id) {
+        await fetch('http://127.0.0.1:5000/backofficer/vehicle', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'delete',
+                id: id})
+        }).then(() => window.location.reload());
+    }
+
+    async function handleAdd() {
+        await fetch('http://127.0.0.1:5000/backofficer/vehicle', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'create',
+                id: 1,
+                state: 2,
+                type: 3 })
+        }).then(() => window.location.reload());
+    }
+</script>
+
+
+
+<!-- <h1>Xe kutkit</h1>
 <table class="table table-hover">
     <thead>
         <tr>
@@ -58,9 +98,9 @@
         {% if role == 'backofficer' %}
             {% for i in range(data|length) %}
                 <tr>
-                    <!-- <form action="/order" method="post" id="orderID:{{data[i]['orderID']}}">
+                    <form action="/order" method="post" id="orderID:{{data[i]['orderID']}}">
                         <input class="form-control form-control-sm" type="hidden" name="orderID" value="{{data[i]['orderID']}}">
-                    </form> -->
+                    </form>
                     <th scope="row">{{i}}</th>
                     <td>{{data[i]['id']}}</td>
                     {% if data[i]['state'] == "sẵn sàng" %}
@@ -68,11 +108,11 @@
                     {% else %}
                         <td style="color: red;">{{data[i]['state']}}</td>
                     {% endif %}
-                    <!-- <td><button class="btn" type="submit" form="orderID:{{data[i]['orderID']}}"><i class="fa-solid fa-trash"></i></button></td> -->
+                    <td><button class="btn" type="submit" form="orderID:{{data[i]['orderID']}}"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
             {% endfor %}
         {% else %}
-            <!-- {% for i in range(data|length) %}
+            {% for i in range(data|length) %}
                 <tr>
                     <th scope="row">{{i}}</th>
                     <td>{{data[i]['orderID']}}</td>
@@ -81,7 +121,7 @@
                     <td>{{data[i]['interior']}}</td>
                     <td>{{data[i]['orderTime']}}</td>
                 </tr>
-            {% endfor %} -->
+            {% endfor %}
         {% endif %}
     </tbody>
-</table>
+</table> -->

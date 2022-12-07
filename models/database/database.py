@@ -9,5 +9,5 @@ Database = {
     "mcp": MCPData,
     "route": routeData,
     "schedule": pairWorkData,
-    "vehicle": vehicleData,
+    "vehicle": vehicleData
 }

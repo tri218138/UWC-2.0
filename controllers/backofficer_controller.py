@@ -2,10 +2,13 @@ from flask import Blueprint, request, render_template, session, redirect, url_fo
 from controllers.task_controller import task_bp
 from controllers.mcp_controller import mcp_bp
 from models.backoffficer_model import dbms
+import calendar, datetime
 from controllers.main_controller import TOKEN, defineToken
 
 backofficer_bp = Blueprint('backofficer_bp', __name__,
                            template_folder="./views")
+
+backofficer_bp.register_blueprint(task_bp, url_prefix='/task')
 
 @backofficer_bp.before_request
 def auth():
@@ -25,7 +28,7 @@ def auth():
 # @login_required
 def home():
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role="backofficer")
+    sidebar = render_template('layout/sidebar.html')
     content = render_template('layout/layout.html',
                               header=header, sidebar=sidebar)
     return render_template('index.html', content=content)
@@ -36,10 +39,30 @@ def page_not_found(e):
     return redirect(url_for('backofficer_bp.home'))
 
 
+
+
 @backofficer_bp.route('/vehicle', methods=['GET', 'POST'])
 # @login_required
 def vehicle():
-    data = dbms.selectVehicle()
+    # by Nguyen Tien Manh
+    try:
+        req_data = request.get_json()
+        dbms.handleActionVehicle(req_data)
+    except:
+        print('Error!!')
+    
+    # tmppdata = dbms.selectVehicle()
+    vehicle_list = dbms.selectVehicle()
+    vec_type_list = set(())
+    data = []
+
+    for val in vehicle_list:
+        vec_type_list.add(val['type'])
+
+    for vec_type in vec_type_list:
+        tmp = [x for x in vehicle_list if x['type'] == vec_type]
+        data.append(tmp)
+
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html', role="backofficer")
     content = render_template(
@@ -47,6 +70,8 @@ def vehicle():
     layout = render_template('layout/layout.html',
                              header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
+
+    # end by Nguyen Tien Manh
 
 
 backofficer_bp.register_blueprint(mcp_bp, url_prefix='/mcp')
@@ -61,16 +86,14 @@ def mcp():
 def member():
     data = dbms.selectEmployee()
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role="backofficer")
+    sidebar = render_template('layout/sidebar.html')
     content = render_template('components/member.html',
                               role="backofficer", data=data)
     layout = render_template('layout/layout.html',
                              header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
 
-
-backofficer_bp.register_blueprint(task_bp, url_prefix='/task')
-
+# #################################################
 
 @backofficer_bp.route('/assign-task', methods=['GET', 'POST'])
 def assignTask():
@@ -84,23 +107,43 @@ def createRoute():
         postData = request.form.to_dict(False)
         if 'create-route' in postData:
             data["step"] = postData['create-route'][0]
-    data["mcp"] = dbms.selectMCP()
+    data["mcp"] = dbms.selectMCPforView()
     data["route"] = dbms.selectRoute()
 
     step = data.pop("step", "overview")
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role="backofficer")
+    sidebar = render_template('layout/sidebar.html')
 
-    mcp = render_template('components/mcp.html', role="backofficer", data= data, step = step)
+    mcp = render_template('components/mcp.html', data= data, step = step)
 
-    operator = render_template('layout/operator.html', role="backofficer", type='create-route')
+    operator = render_template('layout/operator.html', type='create-route')
     layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=mcp, operator= operator)
+    return render_template('index.html', content=layout)
+
+@backofficer_bp.route('/schedule', methods=['GET','POST'])
+def schedule():
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html')
+
+    data = {}
+    today = datetime.datetime.today()
+    data["calendar"] = calendar.monthcalendar(today.year, today.month)
+    if request.method == 'GET':
+        req = request.args.to_dict()
+        if 'datepicker' in req:
+            data["assigned"] = dbms.selectScheduleInDate(req["datepicker"])
+
+    content = render_template('components/datepicker.html', data = data)
+
+    layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
 
 @backofficer_bp.route('/profile', methods=['GET','POST'])
 def personalInfomation():
     header = render_template('layout/header.html')
-    data = dbms.selectUserProfile(auth["username"])
+    sidebar = render_template('layout/sidebar.html')
+    data = dbms.selectUserProfile(auth["idlogin"])
+    data["name"] = data["lname"] + " " +  data["fname"]
     container = render_template('pages/profile.html', data=data)
     if request.method == "GET":
         req = request.args.to_dict()
@@ -111,9 +154,10 @@ def personalInfomation():
     elif request.method == "POST":
         req = request.form.to_dict()
         if req["request"] == "save":
-            dbms.saveUserName(auth["username"], data=req)
-            return redirect(url_for("manager_bp.personalInfomation"))
+            dbms.saveEmployeeInformation(auth["idlogin"], data=req)
+            return redirect(url_for("backofficer_bp.personalInfomation"))
         elif req["request"] == "cancel":
-            return redirect(url_for("manager_bp.personalInfomation"))
-    content = render_template('layout/container.html', header=header, container=container if container is not None else "")
-    return render_template('index.html', content=content)  
+            return redirect(url_for("backofficer_bp.personalInfomation"))
+
+    layout = render_template('layout/layout.html',header=header, content=container)
+    return render_template('index.html', content=layout)

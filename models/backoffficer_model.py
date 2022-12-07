@@ -5,6 +5,30 @@ class DBMS:
         pass
     def selectVehicle(self):
         return Database["vehicle"]
+    # by NTM
+    def handleActionVehicle(self, data):
+        vehicleData = Database["vehicle"]
+        action = data["action"]
+        data.pop("action")
+        if (action == 'create'):
+            vehicleData.append(data)
+        elif (action == 'update'):
+            for idx, item in enumerate(vehicleData):
+                if (item['id'] == data['id']):
+                    pos = idx
+                    break
+            if (vehicleData[pos]['state'] == 'sẵn sàng'):
+                vehicleData[pos]['state'] = 'hỏng'
+            else:
+                vehicleData[pos]['state'] = 'sẵn sàng'
+        elif (action == 'delete'):
+            for idx, item in enumerate(vehicleData):
+                if (item['id'] == data['id']):
+                    pos = idx
+                    break
+            vehicleData.pop(pos)
+    # end by NTM
+    
     def selectEmployee(self):
         return Database["employee"]
     def selectMCP(self):
