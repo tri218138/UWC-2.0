@@ -158,7 +158,7 @@ def personalInfomation():
             return redirect(url_for("manager_bp.personalInfomation"))
         elif req["request"] == "cancel":
             return redirect(url_for("manager_bp.personalInfomation"))
-    content = render_template('layout/container.html', header=header, container=container if container is not None else "")
+    content = render_template('layout/layout.html', header=header, container=container if container is not None else "")
     return render_template('index.html', content=content)  
 
     layout = render_template('layout/layout.html',header=header, content=container)

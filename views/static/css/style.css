@@ -137,8 +137,8 @@
     opacity: .5;
 }
 
-.card:hover{
+.card:hover {
     border-color: var(--bs-yellow);
     cursor: pointer;
-    
+
 }

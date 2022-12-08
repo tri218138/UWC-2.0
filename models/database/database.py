@@ -4,6 +4,7 @@ from models.database.route import routeData
 from models.database.schedule import pairWorkData
 from models.database.vehicle import vehicleData
 from models.database.authentication import authData
+from models.database.message import logData
 
 Database = {
     "employee": employeeData,
@@ -11,5 +12,6 @@ Database = {
     "route": routeData,
     "schedule": pairWorkData,
     "vehicle": vehicleData,
-    "authentication": authData
+    "authentication": authData,
+    "log": logData,
 }
