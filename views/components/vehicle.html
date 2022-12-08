@@ -1,12 +1,14 @@
 {% for row in data %}
 <h2 style="text-transform: capitalize">{{row[0]['type']}}</h2>
-<table class="table table-hover">
+<table class="table table-hover table-vehicle">
     <thead>
         <tr>
             {% if role == 'backofficer' %}
-            <th scope="col">Mã số</th>
+            <th scope="col">STT</th>
             <th scope="col">Biển kiểm soát</th>
             <th scope="col">Trạng thái</th>
+            <th scope="col">Số lượng</th>
+            <th scope="col">Loại xe</th>
             <th scope="col">Hàng động</th>
             {% else %}
             {% endif %}
@@ -23,8 +25,13 @@
             {% else %}
             <td style="color: red;" contenteditable="true">{{row[i]['state']}}</td>
             {% endif %}
+            <td contenteditable="true">{{row[i]['available']}}</td>
+            <td contenteditable="true">{{row[i]['type']}}</td>
             <td>
-                <button class="btn btn-primary" onclick="handleChangeState(`{{row[i]['id']}}`)">Đổi trạng thái</button>
+                <button class="btn btn-primary" 
+                        onclick="handleChangeState(`{{data.index(row)}}`, `{{i}}`)">
+                            Lưu
+                </button>
                 <button class="btn btn-danger" onclick="handleDel(`{{row[i]['id']}}`)">Xoá</button>
             </td>
         </tr>
@@ -33,50 +40,82 @@
         {% endif %}
     </tbody>
 </table>
-
 {% endfor %}
+
+<table class="table table-hover table-add-vehicle">
+    <thead>
+        <tr>
+            {% if role == 'backofficer' %}
+            <th scope="col">Biển kiểm soát</th>
+            <th scope="col">Trạng thái</th>
+            <th scope="col">Số lượng</th>
+            <th scope="col">Loại xe</th>
+            {% else %}
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        <td class="id-ipt" contenteditable="true"></td>
+        <td class="state-ipt" contenteditable="true"></td>
+        <td class="available-ipt" contenteditable="true"></td>
+        <td class="type-ipt" contenteditable="true"></td>
+    </tbody>
+</table>
 <button class="btn btn-success" onclick="handleAdd()">Thêm phương tiện</button>
 
 <script>
-    async function handleChangeState(id) {
-        await fetch('http://127.0.0.1:5000/backofficer/vehicle', {
+    const vehicleTables = document.querySelectorAll('.table-vehicle');
+    const vehicleUrl = 'http://127.0.0.1:5000/backofficer/vehicle';
+
+    const addVehicleTable = document.querySelector('.table-add-vehicle');
+    const idIpt = document.querySelector('.table-vehicle .id-ipt')
+    const stateIpt = document.querySelector('.table-vehicle .state-ipt')
+    const availableIpt = document.querySelector('.table-vehicle .available-ipt')
+    const typeIpt = document.querySelector('.table-vehicle .type-ipt')
+
+    async function sendRequest(url, sendData) {
+        await fetch(url, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                action: 'update',
-                id: id})
+            body: JSON.stringify(sendData)
         }).then(() => window.location.reload());
+    }
+
+    async function handleChangeState(tablePos, rowPos) {
+        tablePos = parseInt(tablePos)
+        rowPos = parseInt(rowPos) + 1
+
+        //console.log(vehicleTables[tablePos].rows[rowPos].cells[0].innerText);
+        sendData = {
+            action: 'update',
+            id: vehicleTables[tablePos].rows[rowPos].cells[1].innerText,
+            state: vehicleTables[tablePos].rows[rowPos].cells[2].innerText,
+            available: vehicleTables[tablePos].rows[rowPos].cells[3].innerText,
+            type: vehicleTables[tablePos].rows[rowPos].cells[4].innerText,
+        }
+        //console.log(sendData)
+        sendRequest(vehicleUrl, sendData)
     }
 
     async function handleDel(id) {
-        await fetch('http://127.0.0.1:5000/backofficer/vehicle', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'delete',
-                id: id})
-        }).then(() => window.location.reload());
+        sendData = {action:'delete', id}
+        sendRequest(vehicleUrl, sendData);
     }
 
     async function handleAdd() {
-        await fetch('http://127.0.0.1:5000/backofficer/vehicle', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'create',
-                id: 1,
-                state: 2,
-                type: 3 })
-        }).then(() => window.location.reload());
+        sendData = {
+            action: 'create',
+            id: addVehicleTable.rows[1].cells[0].innerText,
+            state: addVehicleTable.rows[1].cells[1].innerText,
+            available: addVehicleTable.rows[1].cells[2].innerText,
+            type: addVehicleTable.rows[1].cells[3].innerText,
+        }
+
+        // console.log(sendData)
+        sendRequest(vehicleUrl, sendData)
     }
 </script>
 

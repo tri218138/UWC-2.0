@@ -64,9 +64,9 @@ def vehicle():
         data.append(tmp)
 
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role="backofficer")
+    sidebar = render_template('layout/sidebar.html')
     content = render_template(
-        'components/vehicle.html', role="backofficer", data=data)
+        'components/vehicle.html', role='backofficer', data=data)
     layout = render_template('layout/layout.html',
                              header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
@@ -154,10 +154,12 @@ def personalInfomation():
     elif request.method == "POST":
         req = request.form.to_dict()
         if req["request"] == "save":
-            dbms.saveEmployeeInformation(auth["idlogin"], data=req)
-            return redirect(url_for("backofficer_bp.personalInfomation"))
+            dbms.saveUserName(auth["username"], data=req)
+            return redirect(url_for("manager_bp.personalInfomation"))
         elif req["request"] == "cancel":
-            return redirect(url_for("backofficer_bp.personalInfomation"))
+            return redirect(url_for("manager_bp.personalInfomation"))
+    content = render_template('layout/container.html', header=header, container=container if container is not None else "")
+    return render_template('index.html', content=content)  
 
     layout = render_template('layout/layout.html',header=header, content=container)
     return render_template('index.html', content=layout)
