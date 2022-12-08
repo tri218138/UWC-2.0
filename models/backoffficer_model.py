@@ -27,6 +27,28 @@ class DBMS:
                     pos = idx
                     break
             vehicleData.pop(pos)
+            
+    def handleActionMcp(self, data):
+        mcpData = Database["mcp"]
+        action = data["action"]
+        data.pop("action")
+        if (action == 'create'):
+            mcpData.append(data)
+        elif (action == 'update'):
+            for item in mcpData:
+                if (item['id'] == data['id']):
+                    # item['long'] = data['long']
+                    # item['lat'] = data['lat']
+                    item['available'] = data['available']
+                    item['color'] = data['color']
+                    break
+            
+        elif (action == 'delete'):
+            for idx, item in enumerate(mcpData):
+                if (item['id'] == data['id']):
+                    pos = idx
+                    break
+            mcpData.pop(pos)
     # end by NTM
     
     def selectEmployee(self):

@@ -2,7 +2,7 @@ MCPData = [
     {'id': 'mcp0', 'long': 106.8024652, 'lat': 10.8790426,
         'available': 2, 'color': '#ff0000'},
     {'id': 'mcp1', 'long': 106.8044608, 'lat': 10.8763453,
-     'available': 2, 'color': '#00ff72'},
+        'available': 2, 'color': '#00ff72'},
     {'id': 'mcp2', 'long': 106.8087309, 'lat': 10.8826458,
         'available': 2, 'color': '#00d8ff'},
     {'id': 'mcp3', 'long': 106.8059628, 'lat': 10.884458,

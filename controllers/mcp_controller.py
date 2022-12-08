@@ -24,5 +24,6 @@ def view():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html', role = "backofficer")
     content = render_template('components/mcp.html', role = "backofficer", data= data)
-    layout = render_template('layout/layout.html', header= header, sidebar=sidebar, content = content)
+    operator = render_template('components/mcp-operator.html', role = "backofficer")
+    layout = render_template('layout/layout.html', header= header, sidebar=sidebar, operator=operator, content = content)
     return render_template('index.html', content=layout)

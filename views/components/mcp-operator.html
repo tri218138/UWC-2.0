@@ -1,0 +1,89 @@
+<div class="mcp-operator d-flex flex-column my-2 text-center">
+	<form method="POST" class="form-group">
+		<span>Mã MCP</span>
+		<input class="id-ipt form-control my-2" type="text" placeholder="id" disabled>
+		<span>Tính sẵn có</span>
+		<input class="avail-ipt form-control my-2" type="text" placeholder="available">
+		<span>Màu sắc</span>
+		<input class="color-ipt form-control my-2" type="color" value="#ff0000">
+		<span>Vĩ độ</span>
+		<input class="lat-ipt form-control my-2" type="text" placeholder="lat" disabled>
+		<span>Kinh độ</span>
+		<input class="lng-ipt form-control my-2" type="text" placeholder="long" disabled> 
+	</form>
+	<h3>Tác vụ</h3>
+	<button class="btn btn-primary my-2" onclick="handleCreateMCP()">Thêm MCP</button>
+	<button class="btn btn-warning my-2" onclick="handleUpdateMCP()">Sửa MCP</button>
+	<button class="btn btn-danger my-2" onclick="handleDeleteMCP()">Xoá MCP</button>
+</div>
+
+<script>
+    const mcpUrl = 'http://127.0.0.1:5000/backofficer/mcp';
+
+	var mcpIdIpt = document.querySelector('.mcp-operator .id-ipt')
+	var mcpAvailableIpt = document.querySelector('.mcp-operator .avail-ipt')
+	var mcpColorIpt = document.querySelector('.mcp-operator .color-ipt')
+	var mcpLatIpt = document.querySelector('.mcp-operator .lat-ipt')
+	var mcpLongIpt = document.querySelector('.mcp-operator .lng-ipt')
+
+	function handleCreateMCP() {
+		if (!mcpIdIpt.value) {
+			alert('Thiếu ID của MCP')
+			return
+		}
+		else if (!mcpAvailableIpt.value) {
+			alert('Thiếu độ sẵn sàng của MCP')
+			return
+		}
+		// console.log(mcpColorIpt.value)
+		else if (!selectedLng) {
+			alert('Vui lòng chọn vị trí của MCP trên bản đồ')
+			return
+		}
+
+		sendData = {
+			action: 'create',
+            id: mcpIdIpt.value,
+            long: selectedLng,
+            lat: selectedLat,
+            available: mcpAvailableIpt.value,
+            color: mcpColorIpt.value,
+		}
+
+		console.log(sendData)
+
+        //console.log(sendData)
+        sendRequest(mcpUrl, sendData)
+	}
+
+	function handleUpdateMCP() {
+		if (!mcpIdIpt.value) {
+			alert('Thiếu ID của MCP')
+			return
+		}
+		else if (!mcpAvailableIpt.value) {
+			alert('Thiếu độ sẵn sàng của MCP')
+			return
+		}
+
+		sendData = {
+			action: 'update',
+            id: mcpIdIpt.value,
+            // long: selectedLng,
+            // lat: selectedLat,
+            available: mcpAvailableIpt.value,
+            color: mcpColorIpt.value,
+		}
+        //console.log(sendData)
+        sendRequest(mcpUrl, sendData)
+	}
+
+	function handleDeleteMCP() {
+		sendData = {
+			action: 'delete',
+            id: mcpIdIpt.value,
+		}
+
+        sendRequest(mcpUrl, sendData)
+	}
+</script>
