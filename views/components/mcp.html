@@ -1,7 +1,61 @@
 {% set role = request.blueprint.split('.')[0][:-3] %}
 
 <div id="map-mcp" style="width: 100%; height: 100%;"></div>
+
+<style>
+    #map-mcp .mcp-title {
+        background-color: #05386B; 
+        color: white; 
+        text-align: center;
+        border: 3px;
+        margin: 2px 5px;
+    }
+</style>
+
 <script>
+    var selectedLng;
+    var selectedLat;
+    var curMcpElm;
+
+    async function sendRequest(url, sendData) {
+        await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(sendData)
+        }).then(() => window.location.reload());
+    }
+
+    const clearMcpForm = () => {
+        mcpIdIpt.value = ''
+        mcpAvailableIpt.value = ''
+        mcpColorIpt.value = '#ff0000'
+        mcpLatIpt.value = ''
+        mcpLongIpt.value = ''
+    }
+
+    const updateMcpInfoOnOperator = (id, avail, color, lat, long) => {
+        mcpIdIpt.value = id
+        mcpAvailableIpt.value = avail
+        mcpColorIpt.value = color
+        mcpLatIpt.value = lat
+        mcpLongIpt.value = long
+    }
+
+    const setDisableMcpForm = () => {
+        mcpIdIpt.disabled = true
+        mcpLatIpt.disabled = true
+        mcpLongIpt.disabled = true
+    }
+
+    const setEnableMcpForm = () => {
+        mcpIdIpt.disabled = false
+        //mcpLatIpt.disabled = false
+        //mcpLongIpt.disabled = false
+    }
+
     mapboxgl.accessToken = 'pk.eyJ1Ijoibmh0aHVuZzEwMTIiLCJhIjoiY2w5NWEzbHczMmJlbjNucGMydGhnNHNheCJ9.CaiZuHejM4TIVmh4KnMpaw';
     const map = new mapboxgl.Map({
         container: 'map-mcp',
@@ -16,14 +70,42 @@
         .setPopup(
             new mapboxgl.Popup({ offset: 25 }) // add popups
                 .setHTML(
-                    `<h5 style="background-color: #05386B; color: white; text-align: center;">{{i['id']}}</h5>
+                    `<h5 class="mcp-title">{{i['id']}}</h5>
                     <h6>available: {{i['available']}}</h6>
-                    <h6>coordinate: [{{i['long']}},{{i['lat']}}]</h6>
-                    `
+                    <h6>coordinate: </h6>
+                    <h6>[{{i['long']}},{{i['lat']}}]</h6>`
                 )
         )
         .addTo(map);
+
+    // Khi nhấn vào MCP có sẵn
+    {{i["id"]}}.getElement().addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currMark) currMark.remove()
+        if (curMcpElm) curMcpElm.style.border = "none"
+        setDisableMcpForm();
+        
+        curMcpElm = {{i["id"]}}.getElement();
+        curMcpElm.style.border = "solid 3px gold";
+        updateMcpInfoOnOperator(`{{i['id']}}`, `{{i['available']}}`, `{{i['color']}}`, `{{i['lat']}}`, `{{i['long']}}`);
+    })
     {% endfor %}
+
+    // Khi nhấn vào vùng không có MCP
+    let currMark;
+    map.on('click', (e) => {
+        if (currMark) currMark.remove()
+        if (curMcpElm) curMcpElm.style.border = "none"
+        clearMcpForm();
+        setEnableMcpForm();
+
+        currMark = new mapboxgl.Marker({ color: '#ff0000'})
+        .setLngLat([e.lngLat.lng, e.lngLat.lat])
+        .addTo(map);
+
+        mcpLongIpt.value = selectedLng = e.lngLat.lng
+        mcpLatIpt.value = selectedLat = e.lngLat.lat
+    })
 
     {% if step %}
     {% if step == 'find-optimized-route' %}

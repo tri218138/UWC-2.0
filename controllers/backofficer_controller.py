@@ -79,6 +79,11 @@ backofficer_bp.register_blueprint(mcp_bp, url_prefix='/mcp')
 
 @backofficer_bp.route('/mcp', methods=['GET', 'POST'])
 def mcp():
+    try:
+        req_data = request.get_json()
+        dbms.handleActionMcp(req_data)
+    except:
+        print('Error!!')
     return redirect(url_for('backofficer_bp.mcp_bp.view'))
 
 
