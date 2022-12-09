@@ -20,7 +20,7 @@
         <legend>Lộ trình</legend>
         {% for i in range(0, route|length) %}
         <input class="list-group-item-check pe-none" style="opacity: 0;" type="radio" name="route" id='{{route[i]["id"]}}'
-            value='{{route[i]["id"]}}'>
+            value='{{route[i]["id"]}}' required>
         <label class="list-group-item rounded-3 py-3" for='{{route[i]["id"]}}'>
             {{route[i]["id"]}}
         </label>
@@ -31,7 +31,7 @@
         <legend>Phương tiện</legend>
         {% for i in range(0, vehicle|length) %}
         <input class="list-group-item-check pe-none" style="opacity: 0;" type="radio" name="vehicle" id='{{vehicle[i]["id"]}}'
-            value='{{vehicle[i]["id"]}}'>
+            value='{{vehicle[i]["id"]}}' required>
         <label class="list-group-item rounded-3 py-3" for='{{vehicle[i]["id"]}}'>
             {{vehicle[i]["id"]}}
         </label>
@@ -42,7 +42,7 @@
         <legend>Collector</legend>
         {% for i in range(0, collector|length) %}
         <input class="list-group-item-check pe-none" style="opacity: 0;" type="radio" name="collector" id='{{collector[i]["id"]}}'
-            value='{{collector[i]["id"]}}'>
+            value='{{collector[i]["id"]}}' required>
         <label class="list-group-item rounded-3 py-3" for='{{collector[i]["id"]}}'>
             {{collector[i]["id"]}}
         </label>
@@ -56,8 +56,9 @@
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">route ID</th>
-            <th scope="col">collector ID</th>
+            <th scope="col">ID Lộ trình</th>
+            <th scope="col">ID collector</th>
+            <th scope="col">Biển kiểm soát</th>
             <th scope="col">Xóa</th>
         </tr>
     </thead>
@@ -73,6 +74,7 @@
             <th scope="row">{{i}}</th>
             <td>{{assigned[i]['route']}}</td>
             <td>{{assigned[i]['collector']}}</td>
+            <td>{{assigned[i]['vehicle']}}</td>
             <td><button class="btn" type="submit" form="pairID:{{i}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
         {% endfor %}

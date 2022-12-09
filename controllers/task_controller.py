@@ -75,29 +75,34 @@ def assignRoute():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
 
-    # if request.method == 'POST':            
-    #     # print(request.form.to_dict(False)) # {"option":["assign"], "janitor": ["31312","1313123"], "mcp":["mcp0"]}
-    #     req = request.form.to_dict(False) # user for multivalue in checkbox
-    #     if req["option"][0] == 'assign':
-    #         if "mcp" in req and "janitor" in req:
-    #             pairs = {
-    #                 "mcp" : req["mcp"], # ["mcpx"]
-    #                 "janitor" : req["janitor"] # ["13132","31231"]
-    #             }
-    #             dbms.assignJanitor2MCP(pairs)
-    #     elif req["option"][0] == 'delete':
-    #         if "mcp" in req and "janitor" in req:
-    #             pair = {
-    #                 "mcp" : req["mcp"][0], # mcpx
-    #                 "janitor" : req["janitor"][0] #312323
-    #             }
-    #             dbms.removeWorkAssignedJanitor2MCP(pair)
+    if request.method == 'POST':            
+        # print(request.form.to_dict(False)) # {"option":["assign"], "janitor": ["31312","1313123"], "mcp":["mcp0"]}
+        req = request.form.to_dict(False) # user for multivalue in checkbox
+        print(req)
+        if req["option"][0] == 'assign':
+            today = datetime.datetime.today()
+            if "route" in req and "collector" in req and "vehicle" in req:
+                data = {
+                    "route" : req["route"], # ["route0"]
+                    "collector" : req["collector"], # ["collector0"]
+                    "vehicle" : req["vehicle"], # ["50B-1231"]
+                    "date": [f"{datepicker}"],
+                    "shift" : [shift]
+                }
+                dbms.assignCollector2Route(data)
+        elif req["option"][0] == 'delete':
+            if "mcp" in req and "janitor" in req:
+                pair = {
+                    "mcp" : req["mcp"][0], # mcpx
+                    "janitor" : req["janitor"][0] #312323
+                }
+                dbms.removeWorkAssignedJanitor2MCP(pair)
 
     data = {}
     data["route"] = dbms.selectRouteforAssign()
     data["collector"] = dbms.selectAllCollectorReady()
     data["vehicle"] = dbms.selectVehicleforAssign()
-    # data["assigned"] = dbms.selectTaskAssignedMCP()
+    data["assigned"] = dbms.selectTaskAssignedRoute()
 
     content = render_template('components/task-assign-route.html', data=data)
     operator = render_template('layout/operator.html', type="task-assign-route")

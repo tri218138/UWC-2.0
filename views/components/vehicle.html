@@ -7,7 +7,7 @@
             <th scope="col">STT</th>
             <th scope="col">Biển kiểm soát</th>
             <th scope="col">Trạng thái</th>
-            <th scope="col">Số lượng</th>
+            <!-- <th scope="col"></th> -->
             <th scope="col">Loại xe</th>
             <th scope="col">Hàng động</th>
             {% else %}
@@ -22,10 +22,14 @@
             <td>{{row[i]['id']}}</td>
             {% if row[i]['state'] == "sẵn sàng" %}
             <td style="color: green;" contenteditable="true">{{row[i]['state']}}</td>
-            {% else %}
+            {% elif row[i]['state'] == "hỏng" %}
             <td style="color: red;" contenteditable="true">{{row[i]['state']}}</td>
+            {% elif row[i]['state'] == "đang chạy" %}
+            <td style="color: yellow;" contenteditable="true">{{row[i]['state']}}</td>
+            {% else %}
+            <td style="color: black;" contenteditable="true">{{row[i]['state']}}</td>
             {% endif %}
-            <td contenteditable="true">{{row[i]['available']}}</td>
+            <!-- <td contenteditable="true">{{row[i]['available']}}</td> -->
             <td contenteditable="true">{{row[i]['type']}}</td>
             <td>
                 <button class="btn btn-primary" 

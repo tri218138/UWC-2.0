@@ -75,7 +75,7 @@ class DBMS:
         return data
     def selectVehicleforAssign(self):
         data = [
-            x for x in Database["vehicle"] if x["available"] > 0 and x["state"] == "sẵn sàng"
+            x for x in Database["vehicle"] if x["state"] == "sẵn sàng"
         ]
         return data
     def selectRouteforAssign(self):
@@ -85,6 +85,8 @@ class DBMS:
         return data
     def selectTaskAssignedMCP(self):
         return Database["schedule"]["janitor"]    
+    def selectTaskAssignedRoute(self):
+        return Database["schedule"]["collector"]    
     def selectRoute(self):
         return Database["route"]
     def selectUserProfile(self, id):
@@ -110,6 +112,18 @@ class DBMS:
         ]
 
         return Database["schedule"]["janitor"].extend(data)
+    def assignCollector2Route(self, data):
+        for d in Database["employee"]:
+            if d["id"] in data["collector"]:
+                d["state"] = "bận"
+        for d in Database["vehicle"]:
+            if d["id"] in data["vehicle"]:
+                d["state"] = "đang chạy"
+        data = [
+            { "route": data["route"][0], "date": data["date"][0], "shift": data["shift"][0], "collector": data["collector"][0], "vehicle": data["vehicle"][0] }
+        ]
+
+        return Database["schedule"]["collector"].extend(data)
     def removeWorkAssignedJanitor2MCP(self, pair):
         print(Database["schedule"]["janitor"])
         print(pair)
