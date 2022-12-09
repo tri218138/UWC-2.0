@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, g
 from models.collector_model import dbms
+import calendar, datetime
 from controllers.main_controller import TOKEN, defineToken
 
 collector_bp = Blueprint('collector_bp', __name__, template_folder="./views")
@@ -46,4 +47,25 @@ def personalInfomation():
             return redirect(url_for("backofficer_bp.personalInfomation"))
 
     layout = render_template('layout/layout.html',header=header, content=container)
+    return render_template('index.html', content=layout)
+@collector_bp.route('/message', methods=['GET','POST'])
+def message():
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html')
+
+    if request.method == 'POST':
+        req = request.form.to_dict()
+        if "message" in req:
+            dbms.addLogMessage({
+                "employee_id" : auth["idlogin"], 
+                "time": datetime.datetime.today().strftime('%d/%m/%Y-%H:%M:%S'),
+                "fname": dbms.selectUserProfile(auth["idlogin"])["fname"],
+                "message" : req["message"],
+            })
+    data = {
+        "log" : dbms.getLogMessage(),
+        "employee_id" : auth["idlogin"]
+    }
+    content = render_template('components/message.html', data=data)
+    layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
