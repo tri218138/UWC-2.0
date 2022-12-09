@@ -1,0 +1,146 @@
+{% set role = request.blueprint.split('.')[0][:-3] %}
+
+<div id="map-mcp" style="width: 100%; height: 100%;"></div>
+
+<style>
+    #map-mcp .mcp-title {
+        background-color: #05386B; 
+        color: white; 
+        text-align: center;
+        border: 3px;
+        margin: 2px 5px;
+    }
+</style>
+
+<script>
+    var selectedLng;
+    var selectedLat;
+    var curMcpElm;
+
+    async function sendRequest(url, sendData) {
+        await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(sendData)
+        }).then(() => window.location.reload());
+    }
+
+    const clearMcpForm = () => {
+        mcpIdIpt.value = ''
+        mcpAvailableIpt.value = ''
+        mcpColorIpt.value = '#ff0000'
+        mcpLatIpt.value = ''
+        mcpLongIpt.value = ''
+    }
+
+    const updateMcpInfoOnOperator = (id, avail, color, lat, long) => {
+        mcpIdIpt.value = id
+        mcpAvailableIpt.value = avail
+        mcpColorIpt.value = color
+        mcpLatIpt.value = lat
+        mcpLongIpt.value = long
+    }
+
+    const setDisableMcpForm = () => {
+        mcpIdIpt.disabled = true
+        mcpLatIpt.disabled = true
+        mcpLongIpt.disabled = true
+    }
+
+    const setEnableMcpForm = () => {
+        mcpIdIpt.disabled = false
+        //mcpLatIpt.disabled = false
+        //mcpLongIpt.disabled = false
+    }
+
+    mapboxgl.accessToken = 'pk.eyJ1Ijoibmh0aHVuZzEwMTIiLCJhIjoiY2w5NWEzbHczMmJlbjNucGMydGhnNHNheCJ9.CaiZuHejM4TIVmh4KnMpaw';
+    const map = new mapboxgl.Map({
+        container: 'map-mcp',
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [106.808473, 10.879289],
+        zoom: 15
+    });
+    {% for i in data["mcp"] %}
+    const {{ i["id"]}} = new mapboxgl.Marker({ color: "{{ i['color'] if not step or i['id'] == 'mcp0' else '#05386B' if step == 'overview' else i['color'] if step == 'separate-field' or step == 'find-optimized-route' else '#000000'}}" })
+        .setLngLat([{{ i["long"]}}, {{ i["lat"]}}])
+        .setPopup(
+            new mapboxgl.Popup({ offset: 25 }) // add popups
+                .setHTML(
+                    `<h5 class="mcp-title">{{i['id']}}</h5>
+                    <h6>available: {{i['available']}}</h6>
+                    <h6>coordinate: </h6>
+                    <h6>[{{i['long']}},{{i['lat']}}]</h6>`
+                )
+        )
+        .addTo(map);
+
+    // Khi nhấn vào MCP có sẵn
+    {{i["id"]}}.getElement().addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currMark) currMark.remove()
+        if (curMcpElm) curMcpElm.style.border = "none"
+        setDisableMcpForm();
+        
+        curMcpElm = {{i["id"]}}.getElement();
+        curMcpElm.style.border = "solid 3px gold";
+        updateMcpInfoOnOperator(`{{i['id']}}`, `{{i['available']}}`, `{{i['color']}}`, `{{i['lat']}}`, `{{i['long']}}`);
+    })
+    {% endfor %}
+
+    // Khi nhấn vào vùng không có MCP
+    let currMark;
+    map.on('click', (e) => {
+        if (currMark) currMark.remove()
+        if (curMcpElm) curMcpElm.style.border = "none"
+        clearMcpForm();
+        setEnableMcpForm();
+
+        currMark = new mapboxgl.Marker({ color: '#ff0000'})
+        .setLngLat([e.lngLat.lng, e.lngLat.lat])
+        .addTo(map);
+
+        mcpLongIpt.value = selectedLng = e.lngLat.lng
+        mcpLatIpt.value = selectedLat = e.lngLat.lat
+    })
+
+    {% if step %}
+    {% if step == 'find-optimized-route' %}
+    {% for i in data["route"] %}
+    map.on('load', () => {
+        map.addSource("{{i['id']}}", {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': {{i['coordinates']}}
+                }
+            }
+        });
+        map.addLayer({
+            'id': "{{i['id']}}",
+            'type': 'line',
+            'source': "{{i['id']}}",
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': "{{i['color']}}",
+                'line-width': 8
+            }
+        });
+    });
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+    // Create a default Marker, colored black, rotated 45 degrees.
+    // const marker2 = new mapboxgl.Marker({ color: 'black', rotation: 45 })
+    //     .setLngLat([12.65147, 55.608166])
+    //     .addTo(map);
+</script>

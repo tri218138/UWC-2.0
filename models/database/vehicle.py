@@ -1,0 +1,17 @@
+vehicleData = [
+    {'id': '50B-12131', 'state': 'sẵn sàng', 'type': 'xe tải', 'available': 1},
+    {'id': '50B-12132', 'state': 'sẵn sàng', 'type': 'xe tải', 'available': 1},
+    {'id': '50B-22133', 'state': 'hỏng', 'type': 'xe tải', 'available': 1},
+    {'id': '50B-12134', 'state': 'sẵn sàng', 'type': 'xe tải', 'available': 1},
+    {'id': '50B-12135', 'state': 'sẵn sàng', 'type': 'xe tải', 'available': 1},
+    {'id': '50B-32136', 'state': 'sẵn sàng', 'type': 'xe kutkit', 'available': 1},
+    {'id': '50B-12137', 'state': 'hỏng', 'type': 'xe kutkit', 'available': 1},
+    {'id': '50B-12138', 'state': 'sẵn sàng', 'type': 'xe kutkit', 'available': 1},
+    {'id': '50B-42139', 'state': 'sẵn sàng', 'type': 'xe kutkit', 'available': 1},
+    {'id': '50B-12140', 'state': 'sẵn sàng', 'type': 'xe kutkit', 'available': 1},
+    {'id': '50B-12141', 'state': 'sẵn sàng', 'type': 'xe kutkit', 'available': 1},
+    {'id': '50B-12142', 'state': 'hỏng', 'type': 'xe ben', 'available': 1},
+    {'id': '50B-12143', 'state': 'sẵn sàng', 'type': 'xe ben', 'available': 1},
+    {'id': '50B-52144', 'state': 'sẵn sàng', 'type': 'xe ben', 'available': 1},
+    {'id': '50B-12145', 'state': 'sẵn sàng', 'type': 'xe ben', 'available': 1},
+]

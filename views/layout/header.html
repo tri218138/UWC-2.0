@@ -1,0 +1,76 @@
+{% set role = request.blueprint.split('.')[0][:-3] %}
+<!-- {% print role %} -->
+{% if role in ["janitor","collector","backofficer"] %}
+
+<header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+            <!-- Toggle button -->
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Navbar brand -->
+                <a class="navbar-brand mt-2 mt-lg-0" href="/{{role}}/">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2707/2707279.png" height="50" alt="MDB Logo"
+                        loading="lazy" />
+                </a>
+                <!-- Left links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/{{role}}/">Trang chủ</a>
+                    </li>
+                    <!-- <li class="nav-item" onclick="">
+                        <a class="nav-link" href="/model">Khách sạn</a>
+                    </li>
+                    <li class="nav-item" onclick="">
+                        <a class=" nav-link" href="/build">Đặt khách sạn</a>
+                    </li>
+                    {% if role == 'backofficer' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Chứng nhận doanh nghiệp</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/order">Đơn đặt khách sạn</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/order">Đơn của bạn</a>
+                    </li>
+                    {% endif %} -->
+                </ul>
+                <!-- Left links -->
+            </div>
+            <!-- Collapsible wrapper -->
+
+            <!-- Right elements -->
+            <div class="d-flex align-items-center">
+                <!-- Notifications -->
+                <div class="dropdown">
+                    <a class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4333/4333609.png" class="rounded-circle"
+                            height="25" alt="Black and White Portrait of a Man" loading="lazy" />
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="/{{role}}/profile">Thông tin cá nhân</a>
+                        <!-- <a class="dropdown-item" href="/{{role}}/setting">Cài đặt</a> -->
+                        <a class="dropdown-item" href="/logout">Đăng xuất</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Right elements -->
+        </div>
+        <!-- Container wrapper -->
+    </nav>
+    <!-- Navbar -->
+
+</header>
+
+{% endif %}
