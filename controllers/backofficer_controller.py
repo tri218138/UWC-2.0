@@ -32,6 +32,16 @@ def home():
     content = render_template('layout/layout.html',
                               header=header, sidebar=sidebar)
     return render_template('index.html', content=content)
+@backofficer_bp.route('/notifi', methods=['GET', 'POST'])
+# # @login_required
+def notifi():
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html')
+    content = render_template(
+        'components/notifi.html', role='backofficer')
+    layout = render_template('layout/layout.html',
+                             header=header,sidebar=sidebar, content=content)
+    return render_template('index.html', content=layout)    
 
 
 @backofficer_bp.errorhandler(404)
@@ -172,7 +182,7 @@ def personalInfomation():
 def message():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
-
+    operator = render_template('layout/rightbar.html')
     if request.method == 'POST':
         req = request.form.to_dict()
         if "message" in req:
@@ -187,5 +197,5 @@ def message():
         "employee_id" : auth["idlogin"]
     }
     content = render_template('components/message.html', data=data)
-    layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=content)
+    layout = render_template('layout/layout.html',header=header, sidebar=sidebar,operator=operator, content=content)
     return render_template('index.html', content=layout)
