@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, g
 from models.janitor_model import dbms
 import calendar, datetime
-from controllers.main_controller import TOKEN, defineToken
+from controllers.main_controller import TOKEN, defineToken, getCurrentTime
 
 janitor_bp = Blueprint('janitor_bp', __name__, template_folder="./views")
 
@@ -66,12 +66,13 @@ def schedule():
     sidebar = render_template('layout/sidebar.html')
 
     data = {}
-    today = datetime.datetime.today()
+    today = getCurrentTime()
     data["calendar"] = calendar.monthcalendar(today.year, today.month)
-    # if request.method == 'GET':
-    #     req = request.args.to_dict()
-    #     if 'datepicker' in req:
-    #         data["assigned"] = dbms.selectScheduleInDate(req["datepicker"])
+    if request.method == 'GET':
+        req = request.args.to_dict()
+        if 'datepicker' in req:
+            # data["assigned"] = dbms.selectScheduleInDate(req["datepicker"])
+            pass
 
     content = render_template('components/datepicker.html', data = data)
 
@@ -88,7 +89,8 @@ def message():
         if "message" in req:
             dbms.addLogMessage({
                 "employee_id" : auth["idlogin"], 
-                "time": datetime.datetime.today().strftime('%d/%m/%Y-%H:%M:%S'),
+                "time": getCurrentTime().strftime('%d/%m/%Y-%H:%M:%S'),
+                # "time": getCurrentTime(),
                 "fname": dbms.selectUserProfile(auth["idlogin"])["fname"],
                 "message" : req["message"],
             })

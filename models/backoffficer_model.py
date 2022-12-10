@@ -1,4 +1,5 @@
 from models.database.database import Database
+from controllers.helper_function import *
 
 class DBMS:
     def __init__(self):
@@ -52,7 +53,20 @@ class DBMS:
     # end by NTM
     
     def selectEmployee(self):
-        return Database["employee"]
+        data = Database["employee"]
+        today = getCurrentTime()
+
+        empId = []
+        for s in Database["schedule"]["janitor"]:
+            if int(s["date"]) == today.day and int(s["month"]) == today.month:
+                if s["shift"] == "sáng" and time_in_range(MORNING_SHIFT[0], MORNING_SHIFT[1], today.time()):
+                    empId.append(s["janitor"])
+                if s["shift"] == "chiều" and time_in_range(AFTERNOON_SHIFT[0], AFTERNOON_SHIFT[1], today.time()):
+                    empId.append(s["janitor"])
+        for d in data:
+            if d["id"] in empId:
+                d["state"] = "Đang làm việc"
+        return data
     def selectAllJanitorReady(self):
         data = [
             {'id': x["id"]} for x in Database["employee"] if x["role"] == "janitor" and x["state"] == "sẵn sàng"

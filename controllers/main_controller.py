@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, g
 from models.authetication_model import authService
+from controllers.helper_function import *
 
 # from controllers.collector_controller import collector_bp
 # from controllers.janitor_controller import janitor_bp

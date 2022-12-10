@@ -3,7 +3,7 @@ from controllers.task_controller import task_bp
 from controllers.mcp_controller import mcp_bp
 from models.backoffficer_model import dbms
 import calendar, datetime
-from controllers.main_controller import TOKEN, defineToken
+from controllers.main_controller import TOKEN, defineToken, getCurrentTime
 
 backofficer_bp = Blueprint('backofficer_bp', __name__,
                            template_folder="./views")
@@ -130,7 +130,7 @@ def schedule():
     sidebar = render_template('layout/sidebar.html')
 
     data = {}
-    today = datetime.datetime.today()
+    today = getCurrentTime()
     data["calendar"] = calendar.monthcalendar(today.year, today.month)
     if request.method == 'GET':
         req = request.args.to_dict()
@@ -178,7 +178,8 @@ def message():
         if "message" in req:
             dbms.addLogMessage({
                 "employee_id" : auth["idlogin"], 
-                "time": datetime.datetime.today().strftime('%d/%m/%Y-%H:%M:%S'),
+                "time": getCurrentTime().strftime('%d/%m/%Y-%H:%M:%S'),
+                # "time": getCurrentTime(),
                 "fname": dbms.selectUserProfile(auth["idlogin"])["fname"],
                 "message" : req["message"],
             })

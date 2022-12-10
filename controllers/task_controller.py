@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, g
 from models.backoffficer_model import dbms
+from controllers.main_controller import TOKEN, defineToken, getCurrentTime
 import calendar, datetime
 
 task_bp = Blueprint('task_bp', __name__, template_folder="./views")
@@ -16,7 +17,7 @@ def assign():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
 
-    today = datetime.datetime.today()
+    today = getCurrentTime()
     date_in_current_month = calendar.monthcalendar(today.year, today.month)
 
     if request.method == 'GET':
@@ -48,12 +49,13 @@ def assignMCP():
         # print(request.form.to_dict(False)) # {"option":["assign"], "janitor": ["31312","1313123"], "mcp":["mcp0"]}
         req = request.form.to_dict(False) # user for multivalue in checkbox
         if req["option"][0] == 'assign':
-            today = datetime.datetime.today()
+            today = getCurrentTime()
             if "mcp" in req and "janitor" in req:
                 data = {
                     "mcp" : req["mcp"], # ["mcpx"]
                     "janitor" : req["janitor"], # ["13132","31231"]
                     "date": [f"{datepicker}"],
+                    "month": [f"{today.month}"],
                     "shift" : [shift]
                 }
                 dbms.assignJanitor2MCP(data)
@@ -85,7 +87,7 @@ def assignRoute():
         req = request.form.to_dict(False) # user for multivalue in checkbox
         print(req)
         if req["option"][0] == 'assign':
-            today = datetime.datetime.today()
+            today = getCurrentTime()
             if "route" in req and "collector" in req and "vehicle" in req:
                 data = {
                     "route" : req["route"], # ["route0"]
