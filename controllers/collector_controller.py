@@ -52,7 +52,7 @@ def personalInfomation():
 def message():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
-
+    operator = render_template('layout/operator.html',type='notification')
     if request.method == 'POST':
         req = request.form.to_dict()
         if "message" in req:
@@ -69,3 +69,12 @@ def message():
     content = render_template('components/message.html', data=data)
     layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
+
+@collector_bp.route('/notifi', methods=['GET', 'POST'])
+# # @login_required
+def notifi():
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html')
+    content = render_template('components/notifi.html')
+    layout = render_template('layout/layout.html',header=header,sidebar=sidebar, content=content)
+    return render_template('index.html', content=layout)   

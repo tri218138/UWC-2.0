@@ -172,7 +172,7 @@ def personalInfomation():
 def message():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
-
+    
     if request.method == 'POST':
         req = request.form.to_dict()
         if "message" in req:
@@ -189,3 +189,4 @@ def message():
     content = render_template('components/message.html', data=data)
     layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
+
