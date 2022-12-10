@@ -69,8 +69,10 @@ def assignMCP():
 
     data = {}
     data["mcp"] = dbms.selectMCPforAssign()
-    data["janitor"] = dbms.selectAllJanitorReady()
-    data["assigned"] = dbms.selectTaskAssignedMCP()
+    date = getCurrentTime()
+    date = date.replace(day = int(datepicker))
+    data["janitor"] = dbms.selectAllJanitorReady(date, shift)
+    data["assigned"] = dbms.selectTaskAssignedMCP(date, shift)
 
     content = render_template('components/task-assign-mcp.html', data=data)
     operator = render_template('layout/operator.html', type="task-assign-mcp")

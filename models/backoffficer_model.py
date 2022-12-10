@@ -57,19 +57,25 @@ class DBMS:
         today = getCurrentTime()
 
         empId = []
-        for s in Database["schedule"]["janitor"]:
-            if int(s["date"]) == today.day and int(s["month"]) == today.month:
-                if s["shift"] == "sáng" and time_in_range(MORNING_SHIFT[0], MORNING_SHIFT[1], today.time()):
-                    empId.append(s["janitor"])
-                if s["shift"] == "chiều" and time_in_range(AFTERNOON_SHIFT[0], AFTERNOON_SHIFT[1], today.time()):
-                    empId.append(s["janitor"])
+        for role in ["janitor", "collector"]:
+            for s in Database["schedule"][role]:
+                if int(s["date"]) == today.day and int(s["month"]) == today.month:
+                    if s["shift"] == "sáng" and time_in_range(MORNING_SHIFT[0], MORNING_SHIFT[1], today.time()):
+                        empId.append(s[role])
+                    if s["shift"] == "chiều" and time_in_range(AFTERNOON_SHIFT[0], AFTERNOON_SHIFT[1], today.time()):
+                        empId.append(s[role])
         for d in data:
             if d["id"] in empId:
-                d["state"] = "Đang làm việc"
+                d["state"] = "đang làm việc"
         return data
-    def selectAllJanitorReady(self):
+    def selectAllJanitorReady(self, date, shift):
+        empId = []
+        for s in Database["schedule"]["janitor"]:
+                if int(s["date"]) == int(date.day) and int(s["month"]) == int(date.month):
+                    if s["shift"] == shift:
+                        empId.append(s["janitor"])
         data = [
-            {'id': x["id"]} for x in Database["employee"] if x["role"] == "janitor" and x["state"] == "sẵn sàng"
+            {'id': x["id"]} for x in Database["employee"] if x["role"] == "janitor" and x["id"] not in empId
         ]
         return data
     def selectAllCollectorReady(self):
@@ -97,8 +103,14 @@ class DBMS:
             x for x in Database["route"] if x["available"] > 0
         ]
         return data
-    def selectTaskAssignedMCP(self):
-        return Database["schedule"]["janitor"]    
+    def selectTaskAssignedMCP(self, date, shift):
+        sched = []
+        shift = "sáng" if shift == "morning" else "chiều"
+        for s in Database["schedule"]["janitor"]:
+            if int(s["date"]) == int(date.day) and int(s["month"]) == int(date.month):
+                if s["shift"] == shift:
+                    sched.append(s)
+        return sched
     def selectTaskAssignedRoute(self):
         return Database["schedule"]["collector"]    
     def selectRoute(self):
@@ -154,15 +166,19 @@ class DBMS:
                 break
     
     def selectScheduleInDate(self, date):
-        ret = {}
-        ret["janitor"] = []
+        ret = {
+            "janitor" : [],
+            "collector": []
+        }
+        # ret["janitor"] = []
         for d in Database["schedule"]["janitor"]:
             if d["date"] == date:
                 ret["janitor"].append(d)
+        # ret["janitor"] = []
+        for d in Database["schedule"]["collector"]:
+            if d["date"] == date:
+                ret["collector"].append(d)
         return ret
-
-        def selectEmployee(self):
-            return Database["employee"]
 
     def getLogMessage(self):
         return Database["log"]

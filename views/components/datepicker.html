@@ -59,27 +59,56 @@
             </tbody>
         </table>
     </form>
-    {% if "assigned" in data and "janitor" in data["assigned"] %}
-    <div>
-        {% set assigned = data["assigned"]["janitor"] %}
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">MCP ID</th>
-                    <th scope="col">Janitor ID</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in range(assigned|length) %}
-                <tr>
-                    <th scope="row">{{i}}</th>
-                    <td>{{assigned[i]['mcp']}}</td>
-                    <td>{{assigned[i]['janitor']}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    {% if "assigned" in data %}
+    <div style="display: flex; flex-direction: row;">
+        <div>
+            {% set task = data["assigned"]["janitor"] %}
+            <table class="table table-hover">
+                <thead style="background-color: yellow; color: black;">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">MCP ID</th>
+                        <th scope="col">Janitor ID</th>
+                        <th scope="col">Ca trực</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(task|length) %}
+                    <tr>
+                        <th scope="row">{{i}}</th>
+                        <td>{{task[i]['mcp']}}</td>
+                        <td>{{task[i]['janitor']}}</td>
+                        <td>{{task[i]['shift']}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            {% set task = data["assigned"]["collector"] %}
+            <table class="table table-hover">
+                <thead style="background-color: green; color: white;">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">ID lộ trình</th>
+                        <th scope="col">Vận tải</th>
+                        <th scope="col">Collector ID</th>
+                        <th scope="col">Ca trực</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(task|length) %}
+                    <tr>
+                        <th scope="row">{{i}}</th>
+                        <td>{{task[i]['route']}}</td>
+                        <td>{{task[i]['vehicle']}}</td>
+                        <td>{{task[i]['collector']}}</td>
+                        <td>{{task[i]['shift']}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     {% endif %}
 </div>
