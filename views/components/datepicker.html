@@ -81,5 +81,29 @@
             </tbody>
         </table>
     </div>
+    {% elif "assigned" in data and "collector" in data["assigned"] %}
+    <div>
+        {% set assigned = data["assigned"]["collector"] %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <td scope="row">Collector ID</th>
+                    <th scope="col">Họ</th>
+                    <th scope="col">Tên</th>
+                    <th scope="col">Route ID</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(assigned|length) %}
+                <tr>
+                    <td>{{assigned[i]['id']}}</td>
+                    <td>{{assigned[i]['lname']}}</td>
+                    <td>{{assigned[i]['fname']}}</td>
+                    <td>{{assigned[i]['route']}}</td>                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% endif %}
 </div>

@@ -13,7 +13,10 @@
             {% elif role == 'janitor' %}
             <th scope="col">Họ và tên đệm</th>
             <th scope="col">Tên</th>
-            <th scope="col">Vai trò</th>
+            <th scope="col">Số điện thoại</th>
+            {% elif role == 'collector' %}
+            <th scope="col">Họ và tên đệm</th>
+            <th scope="col">Tên</th>
             <th scope="col">Số điện thoại</th>
             {% endif %}
         </tr>
@@ -39,6 +42,14 @@
             <td scope="row">{{data[i]['lname']}}</td>
             <td scope="row">{{data[i]['fname']}}</td>
             <td scope="row">{{data[i]['role']}}</td>
+            <td scope="row">{{data[i]['phone']}}</td>
+        </tr>
+        {% endfor %}
+        {% elif role == 'collector' %}
+        {% for i in range(data|length) %}
+        <tr>
+            <td scope="row">{{data[i]['lname']}}</td>
+            <td scope="row">{{data[i]['fname']}}</td>
             <td scope="row">{{data[i]['phone']}}</td>
         </tr>
         {% endfor %}

@@ -1,4 +1,5 @@
 from models.database.database import Database
+import pandas as pd
 
 class DBMS:
     def __init__(self):
@@ -16,8 +17,22 @@ class DBMS:
                 for key in c:
                     if key in data:
                         c[key] = data[key]
+    def selectScheduleInDate(self, date):
+        ret = {}
+        ret["collector"] = []
+        for d in Database["schedule"]["collector"]:
+            if d["date"] == date:
+                ret["collector"].append(d)
+        return ret
+
+
     def selectEmployee(self):
-        return Database["employee"]
+        pairWork = Database["employee"]
+        lis = []
+        for x in pairWork:
+            if x["role"] == "collector" :
+                lis.append(x)
+        return lis
 
     def getLogMessage(self):
         return Database["log"]
