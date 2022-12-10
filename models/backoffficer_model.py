@@ -87,10 +87,12 @@ class DBMS:
         data = [
             x for x in Database["mcp"]
         ]
+        for d in data:
+            d["color"] = COLOR_GROUP[int(d["group"])]
         return data
     def selectMCPforAssign(self):
         data = [
-            x for x in Database["mcp"] if x["available"] > 0 and x["id"] != "mcp0"
+            x for x in Database["mcp"] if int(x["available"]) > 0 and x["id"] != "mcp0"
         ]
         return data
     def selectVehicleforAssign(self):
@@ -100,7 +102,7 @@ class DBMS:
         return data
     def selectRouteforAssign(self):
         data = [
-            x for x in Database["route"] if x["available"] > 0
+            x for x in Database["route"] if int(x["available"]) > 0
         ]
         return data
     def selectTaskAssignedMCP(self, date, shift):
@@ -186,10 +188,10 @@ class DBMS:
     def addLogMessage(self, log):
         Database["log"].append(log)
 
-    def selectUserProfile(self, id):
-        for c in Database["employee"]:
-            if c["id"] == id:
-                return c  
+    # def selectUserProfile(self, id):
+    #     for c in Database["employee"]:
+    #         if c["id"] == id:
+    #             return c  
 
 
 

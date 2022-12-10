@@ -2,6 +2,14 @@ import calendar, datetime
 
 MORNING_SHIFT = (datetime.time(8,0,0), datetime.time(11,0,0))
 AFTERNOON_SHIFT = (datetime.time(14,0,0), datetime.time(18,0,0))
+COLOR_GROUP = [
+    "#ff0000", # mcp0
+    "#2200ff", # group1
+    "#f6ff00", # group2
+    "#00e5d6", # group3
+    "#00ff87", # group4
+    "#ffbb00", # group5
+]
 
 def getCurrentTime():
     return datetime.datetime(2022, 12, 11, 9, 8, 10)
