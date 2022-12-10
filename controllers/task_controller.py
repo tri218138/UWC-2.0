@@ -29,8 +29,13 @@ def assign():
             return redirect(url_for('backofficer_bp.task_bp.assignMCP'))
         elif "type" in req and req["type"] == "route":
             return redirect(url_for('backofficer_bp.task_bp.assignRoute'))
+    data = {
+        "date_in_current_month": date_in_current_month,
+        "month": today.month,
+        "year": today.year
+    }
 
-    content = render_template('components/task-assign.html', data= date_in_current_month)
+    content = render_template('components/task-assign.html', data= data)
     layout = render_template('layout/layout.html', header= header, sidebar=sidebar, content = content)
     return render_template('index.html', content=layout)
 

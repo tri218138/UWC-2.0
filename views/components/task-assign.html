@@ -30,6 +30,7 @@
         </style>
         <div>
             <h1 style="color: green; text-align: center;">Thời gian biểu</h1>
+            <h2 style="color: lightblue; text-align: center;">Tháng {{data["month"]}} năm {{data["year"]}}</h2>
             <table class="">
                 <thead>
                     <tr>
@@ -57,7 +58,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for week in data %}
+                    {% for week in data["date_in_current_month"] %}
                     <tr>
                         {% for day in week %}
                         {% if day == 0 %}
@@ -80,12 +81,12 @@
                 </tbody>
             </table>
             <h1 style="color: green; text-align: center;">Ca làm việc</h1>
-            <div>
+            <div style="position: absolute;transform: translate(110%, 20%);">
                 <input type="radio" style="opacity: 0;" name="shift" form="dateGrid" id="shift_morning" value="morning">
-                <label class="btn btn-primary btn-block fa-lg mb-3 w-auto" for="shift_morning">Sáng</label>
+                <label class="btn btn-primary fa-lg mb-3" for="shift_morning">Sáng</label>
                 <input type="radio" style="opacity: 0;" name="shift" form="dateGrid" id="shift_afternoon"
                     value="afternoon">
-                <label class="btn btn-primary btn-block fa-lg mb-3 w-auto" for="shift_afternoon">Chiều</label>
+                <label class="btn btn-primary fa-lg mb-3" for="shift_afternoon">Chiều</label>
                 <input type="radio" style="opacity: 0;" name="shift" form="dateGrid"
                             value="0}" required>
             </div>
