@@ -31,7 +31,8 @@
             <td scope="row">{{data[i]['fname']}}</td>
             <td scope="row">{{data[i]['role']}}</td>
             <td scope="row">{{data[i]['phone']}}</td>
-            <td scope="row">{{data[i]['state']}}</td>
+            {% set color = {"sẵn sàng" : "green", "đang làm việc" : "yellow", "bận" : "gray"} %}
+            <td scope="row" style="color: {{color[data[i]['state']]}}">{{data[i]['state']}}</td>
             <!-- <td><button class="btn" type="submit" form="orderID:{{data[i]['orderID']}}"><i class="fa-solid fa-trash"></i></button></td> -->
         </tr>
         {% endfor %}

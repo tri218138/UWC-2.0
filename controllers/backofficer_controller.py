@@ -3,7 +3,7 @@ from controllers.task_controller import task_bp
 from controllers.mcp_controller import mcp_bp
 from models.backoffficer_model import dbms
 import calendar, datetime
-from controllers.main_controller import TOKEN, defineToken, getCurrentTime
+from controllers.main_controller import TOKEN, defineToken, getCurrentDateTime
 
 backofficer_bp = Blueprint('backofficer_bp', __name__,
                            template_folder="./views")
@@ -29,8 +29,8 @@ def auth():
 def home():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
-    content = render_template('layout/layout.html',
-                              header=header, sidebar=sidebar)
+    content = f"<h1>{getCurrentDateTime()}</h1>"
+    content = render_template('layout/layout.html', header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=content)
 
 
@@ -130,7 +130,7 @@ def schedule():
     sidebar = render_template('layout/sidebar.html')
 
     data = {}
-    today = getCurrentTime()
+    today = getCurrentDateTime()
     data["calendar"] = calendar.monthcalendar(today.year, today.month)
     if request.method == 'GET':
         req = request.args.to_dict()
@@ -178,8 +178,8 @@ def message():
         if "message" in req:
             dbms.addLogMessage({
                 "employee_id" : auth["idlogin"], 
-                "time": getCurrentTime().strftime('%d/%m/%Y-%H:%M:%S'),
-                # "time": getCurrentTime(),
+                "time": getCurrentDateTime().strftime('%d/%m/%Y-%H:%M:%S'),
+                # "time": getCurrentDateTime(),
                 "fname": dbms.selectUserProfile(auth["idlogin"])["fname"],
                 "message" : req["message"],
             })

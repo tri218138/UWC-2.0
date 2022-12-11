@@ -24,21 +24,21 @@ MCPData = [
       "id": "mcp3",
       "long": 106.8059628,
       "lat": 10.884458,
-      "available": 2,
+      "available": 1,
       "group": 1
     },
     {
       "id": "mcp4",
       "long": 106.807379,
       "lat": 10.8805597,
-      "available": 2,
+      "available": 1,
       "group": 1
     },
     {
       "id": "mcp5",
       "long": 106.8035167,
       "lat": 10.8858698,
-      "available": 2,
+      "available": 0,
       "group": 1
     },
     {
