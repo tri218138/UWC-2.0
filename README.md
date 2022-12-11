@@ -27,3 +27,7 @@ Trang lịch công việc:
 [ban 5] Kênh thông báo của MCP  
 [Bạn 6] Trang thông tin cá nhân  
 [bạn 7] Thêm MCP  
+
+Tool:  
+excel to json: https://codebeautify.org/excel-to-json  
+collect mcp: https://www.google.com/maps/d/u/1/edit?mid=11aL88Ezni6YK0BCSb-0COg1vMA3ssK4&ll=10.881486763825414%2C106.80721780054947&z=15  
