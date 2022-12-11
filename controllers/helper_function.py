@@ -1,4 +1,6 @@
 import calendar, datetime
+import random
+import string
 
 MORNING_SHIFT = (datetime.time(8,0,0), datetime.time(11,0,0))
 AFTERNOON_SHIFT = (datetime.time(14,0,0), datetime.time(18,0,0))
@@ -21,3 +23,6 @@ def time_in_range(start, end, x):
         return start <= x <= end
     else:
         return start <= x or x <= end
+
+def generate_employee_id():
+    return ''.join(random.choices(string.digits+string.ascii_uppercase, k=6))

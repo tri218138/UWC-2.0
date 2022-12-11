@@ -198,7 +198,8 @@ class DBMS:
     #     for c in Database["employee"]:
     #         if c["id"] == id:
     #             return c  
-
-
+    def createNewAuth(self, data):
+        # data = {"id" :"", "username": "", "password": "", "role": ""}
+        Database["authentication"].append(data)
 
 dbms = DBMS()

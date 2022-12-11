@@ -158,7 +158,7 @@ MCPData = [
       "long": 106.8046824,
       "lat": 10.8822711,
       "available": 2,
-      "group": 3
+      "group": 1
     },
     {
       "id": "mcp23",
