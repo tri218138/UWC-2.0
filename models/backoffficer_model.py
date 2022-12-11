@@ -173,18 +173,18 @@ class DBMS:
                 Database["schedule"]["janitor"].remove(p)
                 break
     
-    def selectScheduleInDate(self, date):
+    def selectScheduleInDate(self, datetime):
         ret = {
             "janitor" : [],
             "collector": []
         }
         # ret["janitor"] = []
         for d in Database["schedule"]["janitor"]:
-            if d["date"] == date:
+            if d["datetime"].day == datetime:
                 ret["janitor"].append(d)
         # ret["janitor"] = []
         for d in Database["schedule"]["collector"]:
-            if d["date"] == date:
+            if d["datetime"].day == datetime:
                 ret["collector"].append(d)
         return ret
 
