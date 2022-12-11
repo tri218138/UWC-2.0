@@ -53,27 +53,26 @@ class DBMS:
     # end by NTM
     
     def selectEmployee(self):
-        data = Database["employee"]
-        today = getCurrentTime()
-
+        today = getCurrentDateTime()
         empId = []
         for role in ["janitor", "collector"]:
             for s in Database["schedule"][role]:
-                if int(s["date"]) == today.day and int(s["month"]) == today.month:
+                if s["datetime"].day == today.day and s["datetime"].month == today.month:
                     if s["shift"] == "sáng" and time_in_range(MORNING_SHIFT[0], MORNING_SHIFT[1], today.time()):
                         empId.append(s[role])
                     if s["shift"] == "chiều" and time_in_range(AFTERNOON_SHIFT[0], AFTERNOON_SHIFT[1], today.time()):
                         empId.append(s[role])
-        for d in data:
-            if d["id"] in empId:
+        for d in Database["employee"]:
+            if d["id"] in empId and d["state"]=="sẵn sàng":
                 d["state"] = "đang làm việc"
-        return data
-    def selectAllJanitorReady(self, date, shift):
+        return Database["employee"]
+    def selectAllJanitorReady(self, datetime, shift):
         empId = []
         for s in Database["schedule"]["janitor"]:
-                if int(s["date"]) == int(date.day) and int(s["month"]) == int(date.month):
-                    if s["shift"] == shift:
-                        empId.append(s["janitor"])
+            # print(s)
+            if s["datetime"].day == datetime.day and s["datetime"].month == datetime.month:
+                if s["shift"] == shift:
+                    empId.append(s["janitor"])
         data = [
             {'id': x["id"]} for x in Database["employee"] if x["role"] == "janitor" and x["id"] not in empId
         ]
@@ -105,11 +104,11 @@ class DBMS:
             x for x in Database["route"] if int(x["available"]) > 0
         ]
         return data
-    def selectTaskAssignedMCP(self, date, shift):
+    def selectTaskAssignedMCP(self, datetime, shift):
         sched = []
-        shift = "sáng" if shift == "morning" else "chiều"
+        print(datetime, shift, Database["schedule"]["janitor"])
         for s in Database["schedule"]["janitor"]:
-            if int(s["date"]) == int(date.day) and int(s["month"]) == int(date.month):
+            if s["datetime"].day == datetime.day and s["datetime"].month == datetime.month:
                 if s["shift"] == shift:
                     sched.append(s)
         return sched
@@ -131,24 +130,31 @@ class DBMS:
     def assignJanitor2MCP(self, data):
         for d in Database["employee"]:
             if d["id"] in data["janitor"]:
-                d["state"] = "bận"
+                d["state"] = "đang làm việc"
         for d in Database["mcp"]:
             if d["id"] in data["mcp"]:
                 d["available"] = 0
         data = [
-            { "mcp": data["mcp"][0], "date": data["date"][0], "shift": data["shift"][0], "janitor": data["janitor"][i] } for i in range(len(data["janitor"]))
+            { "mcp": data["mcp"][0], 
+            "datetime": data["datetime"][0], 
+            "shift": data["shift"][0],
+            "janitor": data["janitor"][i] } for i in range(len(data["janitor"]))
         ]
 
         return Database["schedule"]["janitor"].extend(data)
     def assignCollector2Route(self, data):
         for d in Database["employee"]:
             if d["id"] in data["collector"]:
-                d["state"] = "bận"
+                d["state"] = "đang làm việc"
         for d in Database["vehicle"]:
             if d["id"] in data["vehicle"]:
                 d["state"] = "đang chạy"
         data = [
-            { "route": data["route"][0], "date": data["date"][0], "shift": data["shift"][0], "collector": data["collector"][0], "vehicle": data["vehicle"][0] }
+            { "route": data["route"][0], 
+            "datetime": data["datetime"][0], 
+            "shift": data["shift"][0],
+            "collector": data["collector"][0], 
+            "vehicle": data["vehicle"][0] }
         ]
 
         return Database["schedule"]["collector"].extend(data)
@@ -167,18 +173,18 @@ class DBMS:
                 Database["schedule"]["janitor"].remove(p)
                 break
     
-    def selectScheduleInDate(self, date):
+    def selectScheduleInDate(self, datetime):
         ret = {
             "janitor" : [],
             "collector": []
         }
         # ret["janitor"] = []
         for d in Database["schedule"]["janitor"]:
-            if d["date"] == date:
+            if d["datetime"].day == datetime:
                 ret["janitor"].append(d)
         # ret["janitor"] = []
         for d in Database["schedule"]["collector"]:
-            if d["date"] == date:
+            if d["datetime"].day == datetime:
                 ret["collector"].append(d)
         return ret
 

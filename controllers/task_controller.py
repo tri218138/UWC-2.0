@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, g
 from models.backoffficer_model import dbms
-from controllers.main_controller import TOKEN, defineToken, getCurrentTime
+from controllers.main_controller import TOKEN, defineToken, getCurrentDateTime
 import calendar, datetime
 
 task_bp = Blueprint('task_bp', __name__, template_folder="./views")
@@ -17,15 +17,16 @@ def assign():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
 
-    today = getCurrentTime()
+    today = getCurrentDateTime()
     date_in_current_month = calendar.monthcalendar(today.year, today.month)
 
     if request.method == 'GET':
         req = request.args.to_dict()
         if "datepicker" in req and "shift" in req:
             global datepicker, shift
-            datepicker = req["datepicker"]
-            shift = req["shift"]
+            datepicker = datetime.datetime(2022, today.month, int(req["datepicker"]))
+            print("req shift: ", req["shift"])
+            shift = "sáng" if req["shift"] == "morning" else "chiều"
         if "type" in req and req["type"] == "mcp":
             return redirect(url_for('backofficer_bp.task_bp.assignMCP'))
         elif "type" in req and req["type"] == "route":
@@ -44,18 +45,15 @@ def assign():
 def assignMCP():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
-
     if request.method == 'POST':            
         # print(request.form.to_dict(False)) # {"option":["assign"], "janitor": ["31312","1313123"], "mcp":["mcp0"]}
         req = request.form.to_dict(False) # user for multivalue in checkbox
         if req["option"][0] == 'assign':
-            today = getCurrentTime()
             if "mcp" in req and "janitor" in req:
                 data = {
                     "mcp" : req["mcp"], # ["mcpx"]
                     "janitor" : req["janitor"], # ["13132","31231"]
-                    "date": [f"{datepicker}"],
-                    "month": [f"{today.month}"],
+                    "datetime": [datepicker], # call datetime.year/month/day/hour/minute/second
                     "shift" : [shift]
                 }
                 dbms.assignJanitor2MCP(data)
@@ -63,16 +61,17 @@ def assignMCP():
             if "mcp" in req and "janitor" in req:
                 pair = {
                     "mcp" : req["mcp"][0], # mcpx
-                    "janitor" : req["janitor"][0] #312323
+                    "janitor" : req["janitor"][0], #312323
+                    "datetime": [datepicker],
+                    "shift": [shift]
                 }
                 dbms.removeWorkAssignedJanitor2MCP(pair)
 
     data = {}
     data["mcp"] = dbms.selectMCPforAssign()
-    date = getCurrentTime()
-    date = date.replace(day = int(datepicker))
-    data["janitor"] = dbms.selectAllJanitorReady(date, shift)
-    data["assigned"] = dbms.selectTaskAssignedMCP(date, shift)
+    # print(date.month)
+    data["janitor"] = dbms.selectAllJanitorReady(datepicker, shift)
+    data["assigned"] = dbms.selectTaskAssignedMCP(datepicker, shift)
 
     content = render_template('components/task-assign-mcp.html', data=data)
     operator = render_template('layout/operator.html', type="task-assign-mcp")
@@ -89,13 +88,13 @@ def assignRoute():
         req = request.form.to_dict(False) # user for multivalue in checkbox
         print(req)
         if req["option"][0] == 'assign':
-            today = getCurrentTime()
+            today = getCurrentDateTime()
             if "route" in req and "collector" in req and "vehicle" in req:
                 data = {
                     "route" : req["route"], # ["route0"]
                     "collector" : req["collector"], # ["collector0"]
                     "vehicle" : req["vehicle"], # ["50B-1231"]
-                    "date": [f"{datepicker}"],
+                    "datetime": [datepicker],
                     "shift" : [shift]
                 }
                 dbms.assignCollector2Route(data)
@@ -103,7 +102,9 @@ def assignRoute():
             if "mcp" in req and "janitor" in req:
                 pair = {
                     "mcp" : req["mcp"][0], # mcpx
-                    "janitor" : req["janitor"][0] #312323
+                    "janitor" : req["janitor"][0], #312323
+                    "datetime": datepicker, 
+                    "shift" : shift
                 }
                 dbms.removeWorkAssignedJanitor2MCP(pair)
 

@@ -11,8 +11,8 @@ COLOR_GROUP = [
     "#ffbb00", # group5
 ]
 
-def getCurrentTime():
-    return datetime.datetime(2022, 12, 11, 9, 8, 10)
+def getCurrentDateTime():
+    return datetime.datetime(2022, 12, 11, 11, 52, 10)
     return datetime.datetime.today()
 
 def time_in_range(start, end, x):
