@@ -26,5 +26,5 @@ class DBMS:
     def selectUserProfile(self, id):
         for c in Database["employee"]:
             if c["id"] == id:
-                return c    
+                return c
 dbms = DBMS()

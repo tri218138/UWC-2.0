@@ -17,13 +17,14 @@ def auth():
 
 @mcp_bp.route('/view', methods=['GET', 'POST'])
 def view():
+    role = request.blueprint.split('.')[0][:-3]
     data = {}
     data['mcp'] = dbms.selectMCPforView()
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role = "backofficer")
+    sidebar = render_template('layout/sidebar.html', role = role)
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role = "backofficer")
-    content = render_template('components/mcp.html', role = "backofficer", data= data)
-    operator = render_template('components/mcp-operator.html', role = "backofficer")
+    sidebar = render_template('layout/sidebar.html', role = role)
+    content = render_template('components/mcp.html', role = role, data= data)
+    operator = render_template('components/mcp-operator.html', role = role)
     layout = render_template('layout/layout.html', header= header, sidebar=sidebar, operator=operator, content = content)
-    return render_template('index.html', content=layout)
+    return render_template('index.html', content=layout, role = role)

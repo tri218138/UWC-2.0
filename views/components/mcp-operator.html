@@ -1,20 +1,31 @@
+
+
 <div class="mcp-operator d-flex flex-column my-2 text-center">
 	<form method="POST" class="form-group">
 		<span>Mã MCP</span>
-		<input class="id-ipt form-control my-2" type="text" placeholder="id" disabled>
+		<input class="id-ipt form-control my-2" type="text" placeholder="Không xác định" disabled>
+
 		<span>Tính sẵn có</span>
-		<input class="avail-ipt form-control my-2" type="text" placeholder="available">
-		<span>Màu sắc</span>
-		<input class="color-ipt form-control my-2" type="color" value="#ff0000">
+		<input class="avail-ipt form-control my-2" type="number" placeholder="Không xác định"
+			{% if role != "backofficer" %} disabled {% endif %}
+		>
+
+		<span>Mã nhóm của MCP</span>
+		<input class="group-id-ipt form-control my-2" type="number" min="1" step="1" max="5" placeholder="Không xác định"
+			{% if role != "backofficer" %} disabled {% endif %}
+		>
+
 		<span>Vĩ độ</span>
 		<input class="lat-ipt form-control my-2" type="text" placeholder="lat" disabled>
 		<span>Kinh độ</span>
 		<input class="lng-ipt form-control my-2" type="text" placeholder="long" disabled> 
 	</form>
+	{% if role == "backofficer" %}
 	<h3>Tác vụ</h3>
 	<button class="btn btn-primary my-2" onclick="handleCreateMCP()">Thêm MCP</button>
 	<button class="btn btn-warning my-2" onclick="handleUpdateMCP()">Sửa MCP</button>
 	<button class="btn btn-danger my-2" onclick="handleDeleteMCP()">Xoá MCP</button>
+	{% endif %}
 </div>
 
 <script>
@@ -22,60 +33,84 @@
 
 	var mcpIdIpt = document.querySelector('.mcp-operator .id-ipt')
 	var mcpAvailableIpt = document.querySelector('.mcp-operator .avail-ipt')
-	var mcpColorIpt = document.querySelector('.mcp-operator .color-ipt')
+	var mcpGroupIpt = document.querySelector('.mcp-operator .group-id-ipt')
 	var mcpLatIpt = document.querySelector('.mcp-operator .lat-ipt')
 	var mcpLongIpt = document.querySelector('.mcp-operator .lng-ipt')
 
-	function handleCreateMCP() {
+	function checkInputConstraint() {
 		if (!mcpIdIpt.value) {
 			alert('Thiếu ID của MCP')
-			return
+			return false
 		}
-		else if (!mcpAvailableIpt.value) {
+		if (/^([a-zA-Z])$/.test(mcpIdIpt.value.charAt(0)) === false) {
+			alert('ID của MCP phải bắt đầu bằng một chữ cái a-z hoặc A-Z')
+			return false
+		}
+		if (!mcpAvailableIpt.value) {
 			alert('Thiếu độ sẵn sàng của MCP')
-			return
+			return false
 		}
-		// console.log(mcpColorIpt.value)
-		else if (!selectedLng) {
+		if (!mcpGroupIpt.value) {
+			alert('Thiếu mã nhóm của MCP')
+			return false
+		}
+		if (mcpGroupIpt.value > 5)  {
+			alert('Mã nhóm MCP phải là số nguyên trong khoảng từ 1->5')
+			return false
+		}
+
+		return true;
+	}
+
+	function handleCreateMCP() {
+		if (!selectedLng) {
 			alert('Vui lòng chọn vị trí của MCP trên bản đồ')
 			return
 		}
-
-		sendData = {
-			action: 'create',
-            id: mcpIdIpt.value,
-            long: selectedLng,
-            lat: selectedLat,
-            available: mcpAvailableIpt.value,
-            color: mcpColorIpt.value,
+		if(!checkInputConstraint()) {
+			return;
 		}
 
-		console.log(sendData)
-
-        //console.log(sendData)
-        sendRequest(mcpUrl, sendData)
+		try {
+			sendData = {
+				action: 'create',
+				id: mcpIdIpt.value,
+				long: selectedLng,
+				lat: selectedLat,
+				available: mcpAvailableIpt.value,
+				group: mcpGroupIpt.value,
+			}
+	
+			console.log(sendData)
+	
+			//console.log(sendData)
+			sendRequest(mcpUrl, sendData)
+		}
+		catch (e) {
+			console.log(e)
+		}
 	}
 
 	function handleUpdateMCP() {
-		if (!mcpIdIpt.value) {
-			alert('Thiếu ID của MCP')
-			return
-		}
-		else if (!mcpAvailableIpt.value) {
-			alert('Thiếu độ sẵn sàng của MCP')
-			return
+		if(!checkInputConstraint()) {
+			return;
 		}
 
-		sendData = {
-			action: 'update',
-            id: mcpIdIpt.value,
-            // long: selectedLng,
-            // lat: selectedLat,
-            available: mcpAvailableIpt.value,
-            color: mcpColorIpt.value,
+		try {
+			sendData = {
+				action: 'update',
+				id: mcpIdIpt.value,
+				// long: selectedLng,
+				// lat: selectedLat,
+				available: mcpAvailableIpt.value,
+				group: mcpGroupIpt.value,
+			}
+			//console.log(sendData)
+			sendRequest(mcpUrl, sendData)
 		}
-        //console.log(sendData)
-        sendRequest(mcpUrl, sendData)
+		catch (e) {
+			console.log(e)
+		}
 	}
 
 	function handleDeleteMCP() {

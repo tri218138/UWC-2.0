@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, g
 from models.janitor_model import dbms
+from controllers.mcp_controller import mcp_bp
 import calendar, datetime
 from controllers.main_controller import TOKEN, defineToken, getCurrentDateTime
 
@@ -101,3 +102,9 @@ def message():
     content = render_template('components/message.html', data=data)
     layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=layout)
+
+
+janitor_bp.register_blueprint(mcp_bp, url_prefix='/mcp')
+@janitor_bp.route('/mcp', methods=['GET','POST'])
+def mcps():
+    return redirect(url_for('janitor_bp.mcp_bp.view'))
