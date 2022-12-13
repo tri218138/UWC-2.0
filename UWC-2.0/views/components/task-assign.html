@@ -1,0 +1,96 @@
+{% set role = request.blueprint.split('.')[0][:-3] %}
+
+{% if role in ["backofficer"] %}
+<form method="get" action="{{request.path}}" id="dateGrid">
+    <div style="display:flex; justify-content: space-around;">
+        <div class="card" style="width: 10rem;">
+            <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/5868/5868069.png"
+                alt="Card image cap">
+            <div class="card-body" style="text-align: center;">
+                <button class="btn btn-primary" name="type" value="mcp">MCP</button>
+            </div>
+        </div>
+        <div class="card" style="width: 10rem;">
+            <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/2007/2007295.png"
+                alt="Card image cap">
+            <div class="card-body" style="text-align: center;">
+                <button class="btn btn-primary" name="type" value="route">Lộ trình</button>
+            </div>
+        </div>
+    </div>
+    <div style="display:flex; justify-content: space-around;">
+        <style>
+            input[type="radio"]:checked+label {
+                background-color: green;
+            }
+
+            input[type="radio"]:disabled+label {
+                background-color: gray;
+            }
+        </style>
+        <div>
+            <h1 style="color: green; text-align: center;">Thời gian biểu</h1>
+            <h2 style="color: lightblue; text-align: center;">Tháng {{data["month"]}} năm {{data["year"]}}</h2>
+            <table class="">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <p class="btn btn-info">Thứ hai</p>
+                        </th>
+                        <th scope="col">
+                            <p class="btn btn-info">Thứ ba</p>
+                        </th>
+                        <th scope="col">
+                            <p class="btn btn-info">Thứ tư</p>
+                        </th>
+                        <th scope="col">
+                            <p class="btn btn-info">Thứ năm</p>
+                        </th>
+                        <th scope="col">
+                            <p class="btn btn-info">Thứ sáu</p>
+                        </th>
+                        <th scope="col">
+                            <p class="btn btn-info">Thứ bảy</p>
+                        </th>
+                        <th scope="col">
+                            <p class="btn btn-info">Chủ nhật</p>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for week in data["date_in_current_month"] %}
+                    <tr>
+                        {% for day in week %}
+                        {% if day == 0 %}
+                        <td>
+                            <input type="radio" style="opacity: 0;" name="datepicker" form="dateGrid" id="day{{day}}"
+                                value="{{day}}" disabled>
+                            <label class="btn btn-primary btn-block fa-lg mb-3" for="day{{day}}">{{day}}</label>
+                            {% else %}
+                        <td>
+                            <input type="radio" style="opacity: 0;" name="datepicker" form="dateGrid" id="day{{day}}"
+                                value="{{day}}">
+                            <label class="btn btn-primary btn-block fa-lg mb-3" for="day{{day}}">{{day}}</label>
+                        </td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    <input type="radio" style="opacity: 0;" name="datepicker" form="dateGrid"
+                            value="0}" required>
+                </tbody>
+            </table>
+            <h1 style="color: green; text-align: center;">Ca làm việc</h1>
+            <div style="position: absolute;transform: translate(110%, 20%);">
+                <input type="radio" style="opacity: 0;" name="shift" form="dateGrid" id="shift_morning" value="morning">
+                <label class="btn btn-primary fa-lg mb-3" for="shift_morning">Sáng</label>
+                <input type="radio" style="opacity: 0;" name="shift" form="dateGrid" id="shift_afternoon"
+                    value="afternoon">
+                <label class="btn btn-primary fa-lg mb-3" for="shift_afternoon">Chiều</label>
+                <input type="radio" style="opacity: 0;" name="shift" form="dateGrid"
+                            value="0}" required>
+            </div>
+        </div>
+    </div>
+</form>
+{% endif %}

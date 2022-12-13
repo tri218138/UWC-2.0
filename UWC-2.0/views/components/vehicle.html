@@ -1,0 +1,170 @@
+{% for row in data %}
+<h2 style="text-transform: capitalize">{{row[0]['type']}}</h2>
+<table class="table table-hover table-vehicle">
+    <thead>
+        <tr>
+            {% if role == 'backofficer' %}
+            <th scope="col">STT</th>
+            <th scope="col">Biển kiểm soát</th>
+            <th scope="col">Trạng thái</th>
+            <!-- <th scope="col"></th> -->
+            <th scope="col">Loại xe</th>
+            <th scope="col">Hàng động</th>
+            {% else %}
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% if role == 'backofficer' %}
+        {% for i in range(row|length) %}
+        <tr>
+            <th scope="row">{{i}}</th>
+            <td>{{row[i]['id']}}</td>
+            {% if row[i]['state'] == "sẵn sàng" %}
+            <td style="color: green;" contenteditable="true">{{row[i]['state']}}</td>
+            {% elif row[i]['state'] == "hỏng" %}
+            <td style="color: red;" contenteditable="true">{{row[i]['state']}}</td>
+            {% elif row[i]['state'] == "đang chạy" %}
+            <td style="color: yellow;" contenteditable="true">{{row[i]['state']}}</td>
+            {% else %}
+            <td style="color: black;" contenteditable="true">{{row[i]['state']}}</td>
+            {% endif %}
+            <!-- <td contenteditable="true">{{row[i]['available']}}</td> -->
+            <td contenteditable="true">{{row[i]['type']}}</td>
+            <td>
+                <button class="btn btn-primary" 
+                        onclick="handleChangeState(`{{data.index(row)}}`, `{{i}}`)">
+                            Lưu
+                </button>
+                <button class="btn btn-danger" onclick="handleDel(`{{row[i]['id']}}`)">Xoá</button>
+            </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        {% endif %}
+    </tbody>
+</table>
+{% endfor %}
+
+<table class="table table-hover table-add-vehicle">
+    <thead>
+        <tr>
+            {% if role == 'backofficer' %}
+            <th scope="col">Biển kiểm soát</th>
+            <th scope="col">Trạng thái</th>
+            <th scope="col">Số lượng</th>
+            <th scope="col">Loại xe</th>
+            {% else %}
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        <td class="id-ipt" contenteditable="true"></td>
+        <td class="state-ipt" contenteditable="true"></td>
+        <td class="available-ipt" contenteditable="true"></td>
+        <td class="type-ipt" contenteditable="true"></td>
+    </tbody>
+</table>
+<button class="btn btn-success" onclick="handleAdd()">Thêm phương tiện</button>
+
+<script>
+    const vehicleTables = document.querySelectorAll('.table-vehicle');
+    const vehicleUrl = 'http://127.0.0.1:5000/backofficer/vehicle';
+
+    const addVehicleTable = document.querySelector('.table-add-vehicle');
+    const idIpt = document.querySelector('.table-vehicle .id-ipt')
+    const stateIpt = document.querySelector('.table-vehicle .state-ipt')
+    const availableIpt = document.querySelector('.table-vehicle .available-ipt')
+    const typeIpt = document.querySelector('.table-vehicle .type-ipt')
+
+    async function sendRequest(url, sendData) {
+        await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(sendData)
+        }).then(() => window.location.reload());
+    }
+
+    async function handleChangeState(tablePos, rowPos) {
+        tablePos = parseInt(tablePos)
+        rowPos = parseInt(rowPos) + 1
+
+        //console.log(vehicleTables[tablePos].rows[rowPos].cells[0].innerText);
+        sendData = {
+            action: 'update',
+            id: vehicleTables[tablePos].rows[rowPos].cells[1].innerText,
+            state: vehicleTables[tablePos].rows[rowPos].cells[2].innerText,
+            available: vehicleTables[tablePos].rows[rowPos].cells[3].innerText,
+            type: vehicleTables[tablePos].rows[rowPos].cells[4].innerText,
+        }
+        //console.log(sendData)
+        sendRequest(vehicleUrl, sendData)
+    }
+
+    async function handleDel(id) {
+        sendData = {action:'delete', id}
+        sendRequest(vehicleUrl, sendData);
+    }
+
+    async function handleAdd() {
+        sendData = {
+            action: 'create',
+            id: addVehicleTable.rows[1].cells[0].innerText,
+            state: addVehicleTable.rows[1].cells[1].innerText,
+            available: addVehicleTable.rows[1].cells[2].innerText,
+            type: addVehicleTable.rows[1].cells[3].innerText,
+        }
+
+        // console.log(sendData)
+        sendRequest(vehicleUrl, sendData)
+    }
+</script>
+
+
+
+<!-- <h1>Xe kutkit</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            {% if role == 'backofficer' %}
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Trạng thái</th>
+            {% else %}
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% if role == 'backofficer' %}
+            {% for i in range(data|length) %}
+                <tr>
+                    <form action="/order" method="post" id="orderID:{{data[i]['orderID']}}">
+                        <input class="form-control form-control-sm" type="hidden" name="orderID" value="{{data[i]['orderID']}}">
+                    </form>
+                    <th scope="row">{{i}}</th>
+                    <td>{{data[i]['id']}}</td>
+                    {% if data[i]['state'] == "sẵn sàng" %}
+                        <td style="color: green;">{{data[i]['state']}}</td>
+                    {% else %}
+                        <td style="color: red;">{{data[i]['state']}}</td>
+                    {% endif %}
+                    <td><button class="btn" type="submit" form="orderID:{{data[i]['orderID']}}"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            {% for i in range(data|length) %}
+                <tr>
+                    <th scope="row">{{i}}</th>
+                    <td>{{data[i]['orderID']}}</td>
+                    <td>{{data[i]['design']}}</td>
+                    <td>{{data[i]['exterior']}}</td>
+                    <td>{{data[i]['interior']}}</td>
+                    <td>{{data[i]['orderTime']}}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table> -->

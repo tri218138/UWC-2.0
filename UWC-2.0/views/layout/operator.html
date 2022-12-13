@@ -1,0 +1,26 @@
+{% set role = request.blueprint.split('.')[0][:-3] %}
+<!-- {% print role %} # customer -->
+{% if role in ["backofficer"] %}
+{% if type == 'task-assign-mcp' %}
+<input type="submit" class="btn btn-primary btn-lg" form="assign-task-mcp" value="Lưu">
+{% endif %}
+{% if type == 'task-assign-route' %}
+<input type="submit" class="btn btn-primary btn-lg" form="assign-task-route" value="Lưu">
+{% endif %}
+{% if type == 'create-route' %}
+<form action="{{request.url}}" method="post" id="create-route">
+    <input type="submit" class="btn btn-primary btn-lg" style="width: 100%" name="create-route" value="separate-field">
+    <input type="submit" class="btn btn-primary btn-lg" style="width: 100%" name="create-route" value="find-optimized-route">
+</form>
+{% endif %}
+{% endif %}
+{% if type == 'notification' %}
+<ul>
+    <li class="nav-item">
+        <a href="/{{role}}/notifi" class="btn btn-primary btn-block fa-lg mb-3">
+
+            <i class="fa-solid fa-truck"></i><span class="ms-1 d-none d-sm-inline">Thông báo MCPs đầy</span>
+        </a>
+    </li>
+</ul>
+{% endif %}

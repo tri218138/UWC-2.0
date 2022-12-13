@@ -1,0 +1,73 @@
+{% set janitor = data["janitor"] %}
+{% set mcp = data["mcp"] %}
+{% set assigned = data["assigned"] %}
+<style>
+    input[type="radio"]:checked+label {
+        background-color: green;
+        color: white;
+    }
+
+    input[type="checkbox"]:checked+label {
+        background-color: green;
+        color: white;
+    }
+</style>
+<form action="{{request.path}}" method="post" id="assign-task-mcp">
+    <div class="form-group" style="position: relative;">
+        <input class="list-group-item-check pe-none" type="hidden" name="option" value='assign'>
+        <div class="list-group list-group-checkable gap-2 border-0"
+            style="margin: 0; width: 49%; float: left; text-align: center;" id="mcp">
+            <legend>MCP</legend>
+            {% for i in range(0, mcp|length) %}
+            <div class="card">
+                <input class="list-group-item-check pe-none" style="opacity: 0;" type="radio" name="mcp" id='{{mcp[i]["id"]}}'
+                    value='{{mcp[i]["id"]}}'>
+                <label class="list-group-item rounded-3 py-3" for='{{mcp[i]["id"]}}'>
+                    {{mcp[i]["id"]}}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="list-group list-group-checkable d-grid gap-2 border-0 " style="margin: 0;  text-align: center;"
+            id="jan">
+            <legend>Janitor</legend>
+            {% for i in range(0, janitor|length) %}
+            <div class="card">
+                <input class="list-group-item-check pe-none" style="opacity: 0;" type="checkbox" name="janitor" id='{{janitor[i]["id"]}}'
+                    value='{{janitor[i]["id"]}}'>
+                <label class="list-group-item rounded-3 py-3" for='{{janitor[i]["id"]}}'>
+                    {{janitor[i]["id"]}}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- <input type="submit" style="margin: 10px;" class="btn btn-primary btn-lg" form="formOder" value="Đặt hàng"> -->
+</form>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">MCP ID</th>
+            <th scope="col">Janitor ID</th>
+            <th scope="col">Xóa</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in range(assigned|length) %}
+        <tr>
+            <form action="{{request.path}}" method="post" id="pairID:{{i}}">
+                <input class="form-control form-control-sm" type="hidden" name="option" value="delete">
+                <input class="list-group-item-check pe-none" type="hidden" name="mcp" value='{{assigned[i]["mcp"]}}'>
+                <input class="list-group-item-check pe-none" type="hidden" name="janitor"
+                    value='{{assigned[i]["janitor"]}}'>
+            </form>
+            <th scope="row">{{i}}</th>
+            <td>{{assigned[i]['mcp']}}</td>
+            <td>{{assigned[i]['janitor']}}</td>
+            <td><button class="btn" type="submit" form="pairID:{{i}}"><i class="fa-solid fa-trash"></i></button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

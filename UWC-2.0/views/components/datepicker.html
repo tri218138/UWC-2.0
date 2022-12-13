@@ -1,0 +1,114 @@
+{% set role = request.blueprint.split('.')[0][:-3] %}
+<div style="display:flex; flex-direction:column; align-items:center">
+    <style>
+        input[type="submit"]:checked+label {
+            background-color: green;
+        }
+
+        input[type="submit"]:disabled+label {
+            background-color: gray;
+        }
+    </style>
+    <form method="get" action="{{request.path}}" id="dateGrid">
+        <table class="">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <p class="btn btn-info">Thứ hai</p>
+                    </th>
+                    <th scope="col">
+                        <p class="btn btn-info">Thứ ba</p>
+                    </th>
+                    <th scope="col">
+                        <p class="btn btn-info">Thứ tư</p>
+                    </th>
+                    <th scope="col">
+                        <p class="btn btn-info">Thứ năm</p>
+                    </th>
+                    <th scope="col">
+                        <p class="btn btn-info">Thứ sáu</p>
+                    </th>
+                    <th scope="col">
+                        <p class="btn btn-info">Thứ bảy</p>
+                    </th>
+                    <th scope="col">
+                        <p class="btn btn-info">Chủ nhật</p>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for week in data["calendar"] %}
+                <tr>
+                    {% for day in week %}
+                    {% if day == 0 %}
+                    <td>
+                        <input type="submit" style="opacity: 0;" name="datepicker" form="dateGrid" id="day{{day}}"
+                            value="{{day}}" disabled>
+                        <label class="btn btn-primary btn-block fa-lg mb-3" for="day{{day}}">{{day}}</label>
+                    </td>
+                    {% else %}
+                    <td>
+                        <input type="submit" style="opacity: 0;" name="datepicker" form="dateGrid" id="day{{day}}"
+                            value="{{day}}">
+                        <label class="btn btn-primary btn-block fa-lg mb-3" for="day{{day}}">{{day}}</label>
+                    </td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+    {% if "assigned" in data %}
+    <div style="display: flex; flex-direction: row;">
+        <div>
+            {% set task = data["assigned"]["janitor"] %}
+            <table class="table table-hover">
+                <thead style="background-color: yellow; color: black;">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">MCP ID</th>
+                        <th scope="col">Janitor ID</th>
+                        <th scope="col">Ca trực</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(task|length) %}
+                    <tr>
+                        <th scope="row">{{i}}</th>
+                        <td>{{task[i]['mcp']}}</td>
+                        <td>{{task[i]['janitor']}}</td>
+                        <td>{{task[i]['shift']}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            {% set task = data["assigned"]["collector"] %}
+            <table class="table table-hover">
+                <thead style="background-color: green; color: white;">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">ID lộ trình</th>
+                        <th scope="col">Vận tải</th>
+                        <th scope="col">Collector ID</th>
+                        <th scope="col">Ca trực</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(task|length) %}
+                    <tr>
+                        <th scope="row">{{i}}</th>
+                        <td>{{task[i]['route']}}</td>
+                        <td>{{task[i]['vehicle']}}</td>
+                        <td>{{task[i]['collector']}}</td>
+                        <td>{{task[i]['shift']}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>

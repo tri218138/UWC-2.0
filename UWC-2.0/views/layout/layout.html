@@ -1,0 +1,18 @@
+{% set role = request.blueprint.split('.')[0][:-3] %}
+{{header | safe}}
+{% if container %}
+{{container | safe}}
+{% else %}
+<div class="row">
+    <div class="col-sm-2" style="position: relative; overflow-y: scroll; height: 85vh;">
+        {{sidebar | safe}}
+    </div>
+    <div class="col-sm-8" style="position: relative; overflow-y: scroll; height: 85vh;">
+        <!-- Gallery -->
+        {{content | safe}}
+    </div>
+    <div class="col-sm-2" style="position: relative; overflow-y: scroll; height: 85vh;">
+        {{operator | safe}}
+    </div>
+</div>
+{% endif %}
