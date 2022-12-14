@@ -11,7 +11,7 @@ MCPData = [
       "long": 106.8044608,
       "lat": 10.8763453,
       "available": 2,
-      "group": 1
+      "group": 2
     },
     {
       "id": "mcp2",
@@ -60,7 +60,7 @@ MCPData = [
       "long": 106.8051701,
       "lat": 10.8751954,
       "available": 2,
-      "group": 1
+      "group": 2
     },
     {
       "id": "mcp9",
@@ -88,14 +88,14 @@ MCPData = [
       "long": 106.799238,
       "lat": 10.8790468,
       "available": 2,
-      "group": 2
+      "group": 3
     },
     {
       "id": "mcp13",
       "long": 106.7966573,
       "lat": 10.8812175,
       "available": 2,
-      "group": 2
+      "group": 3
     },
     {
       "id": "mcp14",
@@ -109,14 +109,14 @@ MCPData = [
       "long": 106.7992751,
       "lat": 10.8874126,
       "available": 2,
-      "group": 2
+      "group": 1
     },
     {
       "id": "mcp16",
       "long": 106.799833,
       "lat": 10.8854318,
       "available": 2,
-      "group": 2
+      "group": 1
     },
     {
       "id": "mcp17",
@@ -144,7 +144,7 @@ MCPData = [
       "long": 106.7997901,
       "lat": 10.8739687,
       "available": 2,
-      "group": 3
+      "group": 2
     },
     {
       "id": "mcp21",

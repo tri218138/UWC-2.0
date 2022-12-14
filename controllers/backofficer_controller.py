@@ -4,6 +4,7 @@ from controllers.mcp_controller import mcp_bp
 from models.backoffficer_model import dbms
 import calendar, datetime
 from controllers.main_controller import TOKEN, defineToken, getCurrentDateTime
+from controllers.create_route import create_optimized_route
 
 backofficer_bp = Blueprint('backofficer_bp', __name__,
                            template_folder="./views")
@@ -112,6 +113,7 @@ def createRoute():
 
     if request.method == 'POST':
         postData = request.form.to_dict(False)
+        create_optimized_route()        
         if 'step' in postData:
             data["step"] = postData['step'][0]
 
