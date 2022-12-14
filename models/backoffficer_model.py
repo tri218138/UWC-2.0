@@ -180,11 +180,11 @@ class DBMS:
         }
         # ret["janitor"] = []
         for d in Database["schedule"]["janitor"]:
-            if d["datetime"].day == datetime:
+            if d["datetime"].day == datetime.day and d["datetime"].month == datetime.month:
                 ret["janitor"].append(d)
         # ret["janitor"] = []
         for d in Database["schedule"]["collector"]:
-            if d["datetime"].day == datetime:
+            if d["datetime"].day == datetime.day and d["datetime"].month == datetime.month:
                 ret["collector"].append(d)
         return ret
 

@@ -9,8 +9,13 @@
 {% endif %}
 {% if type == 'create-route' %}
 <form action="{{request.url}}" method="post" id="create-route">
-    <input type="submit" class="btn btn-primary btn-lg" style="width: 100%" name="create-route" value="separate-field">
-    <input type="submit" class="btn btn-primary btn-lg" style="width: 100%" name="create-route" value="find-optimized-route">
+    {% if step == 'overview' %}
+    <input type="submit" style="opacity: 0;"  name="step" value="separate-field" id="separate-field">
+    <label for="separate-field" style="width: 100%" class="btn btn-primary btn-lg" >Chia vùng MCP</label>
+    {% elif step == 'separate-field' %}
+    <input type="submit" style="opacity: 0;"  name="step" value="find-optimized-route" id="find-optimized-route">
+    <label for="find-optimized-route" style="width: 100%" class="btn btn-primary btn-lg" >Tìm lộ trình tối ưu</label>
+    {% endif %}
 </form>
 {% endif %}
 {% endif %}

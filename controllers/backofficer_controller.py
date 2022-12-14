@@ -106,21 +106,21 @@ def assignTask():
 
 @backofficer_bp.route('/create-route', methods=['POST', 'GET'])
 def createRoute():
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html')
     data = {"step": 'overview'}
+
     if request.method == 'POST':
         postData = request.form.to_dict(False)
-        if 'create-route' in postData:
-            data["step"] = postData['create-route'][0]
+        if 'step' in postData:
+            data["step"] = postData['step'][0]
+
     data["mcp"] = dbms.selectMCPforView()
     data["route"] = dbms.selectRoute()
 
-    step = data.pop("step", "overview")
-    header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html')
+    mcp = render_template('components/mcp.html', data= data, step = data["step"])
 
-    mcp = render_template('components/mcp.html', data= data, step = step)
-
-    operator = render_template('layout/operator.html', type='create-route')
+    operator = render_template('layout/operator.html', type='create-route', step=data["step"])
     layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=mcp, operator= operator)
     return render_template('index.html', content=layout)
 
@@ -135,7 +135,8 @@ def schedule():
     if request.method == 'GET':
         req = request.args.to_dict()
         if 'datepicker' in req:
-            data["assigned"] = dbms.selectScheduleInDate(req["datepicker"])
+            datetime = today.replace(day=int(req['datepicker']))
+            data["assigned"] = dbms.selectScheduleInDate(datetime)
 
     content = render_template('components/datepicker.html', data = data)
 

@@ -165,6 +165,6 @@ MCPData = [
       "long": 106.8097035,
       "lat": 10.8797425,
       "available": 2,
-      "group": 3
+      "group": 1
     }
 ]

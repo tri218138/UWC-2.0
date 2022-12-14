@@ -46,7 +46,7 @@ def personalInfomation():
         elif req["request"] == "cancel":
             return redirect(url_for("backofficer_bp.personalInfomation"))
 
-    layout = render_template('layout/layout.html',header=header, content=container)
+    layout = render_template('layout/layout.html',header=header, content=container, sidebar=sidebar)
     return render_template('index.html', content=layout)
 
 @janitor_bp.route('/member', methods=['GET', 'POST'])
@@ -65,14 +65,17 @@ def schedule():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
 
-    data = {}
     today = getCurrentDateTime()
-    data["calendar"] = calendar.monthcalendar(today.year, today.month)
+    data = {
+        "calendar": calendar.monthcalendar(today.year, today.month),
+        "empId": auth["idlogin"],
+        "worktime": dbms.selectScheduleInMonth(auth["idlogin"], today.month)
+    }
     if request.method == 'GET':
         req = request.args.to_dict()
         if 'datepicker' in req:
-            # data["assigned"] = dbms.selectScheduleInDate(req["datepicker"])
-            pass
+            datetime = today.replace(day=int(req['datepicker']))
+            data["assigned"] = dbms.selectScheduleInDate(auth["idlogin"], datetime)
 
     content = render_template('components/datepicker.html', data = data)
 
