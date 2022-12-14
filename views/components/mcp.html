@@ -31,27 +31,29 @@
     const clearMcpForm = () => {
         mcpIdIpt.value = ''
         mcpAvailableIpt.value = ''
-        mcpColorIpt.value = '#ff0000'
+        mcpGroupIpt.value = ''
         mcpLatIpt.value = ''
         mcpLongIpt.value = ''
     }
 
-    const updateMcpInfoOnOperator = (id, avail, color, lat, long) => {
+    const updateMcpInfoOnOperator = (id, avail, group, lat, long) => {
         mcpIdIpt.value = id
         mcpAvailableIpt.value = avail
-        mcpColorIpt.value = color
+        mcpGroupIpt.value = group
         mcpLatIpt.value = lat
         mcpLongIpt.value = long
     }
 
     const setDisableMcpForm = () => {
-        mcpIdIpt.disabled = true
         mcpLatIpt.disabled = true
         mcpLongIpt.disabled = true
+        mcpIdIpt.disabled = true
     }
 
     const setEnableMcpForm = () => {
-        mcpIdIpt.disabled = false
+        {% if role == "backofficer" %}
+            mcpIdIpt.disabled = false
+        {% endif %}
         //mcpLatIpt.disabled = false
         //mcpLongIpt.disabled = false
     }
@@ -87,7 +89,7 @@
         
         curMcpElm = {{i["id"]}}.getElement();
         curMcpElm.style.border = "solid 3px gold";
-        updateMcpInfoOnOperator(`{{i['id']}}`, `{{i['available']}}`, `{{i['color']}}`, `{{i['lat']}}`, `{{i['long']}}`);
+        updateMcpInfoOnOperator(`{{i['id']}}`, `{{i['available']}}`, `{{i['group']}}`, `{{i['lat']}}`, `{{i['long']}}`);
     })
     {% endfor %}
 

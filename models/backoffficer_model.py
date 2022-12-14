@@ -41,7 +41,7 @@ class DBMS:
                     # item['long'] = data['long']
                     # item['lat'] = data['lat']
                     item['available'] = data['available']
-                    item['color'] = data['color']
+                    item['group'] = data['group']
                     break
             
         elif (action == 'delete'):
