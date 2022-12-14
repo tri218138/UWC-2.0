@@ -48,6 +48,35 @@ def personalInfomation():
 
     layout = render_template('layout/layout.html',header=header, content=container)
     return render_template('index.html', content=layout)
+
+@collector_bp.route('/member', methods=['GET', 'POST'])
+def member():
+    data = dbms.selectEmployee()
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html')
+    content = render_template('components/member.html',
+                              role="collector", data=data)
+    layout = render_template('layout/layout.html',
+                             header=header, sidebar=sidebar, content=content)
+    return render_template('index.html', content=layout)
+
+@collector_bp.route('/schedule', methods=['GET','POST'])
+def schedule():
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html')
+
+    data = {}
+    today = datetime.datetime.today()
+    data["calendar"] = calendar.monthcalendar(today.year, today.month)
+    if request.method == 'GET':
+        req = request.args.to_dict()
+        if 'datepicker' in req:
+            data["assigned"] = dbms.selectScheduleInDate(req["datepicker"])
+
+    content = render_template('components/datepicker.html', data = data)
+
+    layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=content)
+    return render_template('index.html', content=layout)
 @collector_bp.route('/message', methods=['GET','POST'])
 def message():
     header = render_template('layout/header.html')
