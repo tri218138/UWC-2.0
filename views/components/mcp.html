@@ -110,7 +110,7 @@
     })
 
     {% if step %}
-    {% if step == 'find-optimized-route' %}
+    {% if step in ['find-optimized-route', 'route-search'] %}
     {% for i in data["route"] %}
     map.on('load', () => {
         map.addSource("{{i['id']}}", {

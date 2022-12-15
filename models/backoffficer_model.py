@@ -66,6 +66,20 @@ class DBMS:
             if d["id"] in empId and d["state"]=="sẵn sàng":
                 d["state"] = "đang làm việc"
         return Database["employee"]
+    def selectEmployeeById(self, id):
+        today = getCurrentDateTime()
+        for employee in Database["employee"]:
+            if employee["id"] == id:
+                role = employee["role"]
+                if role in ["janitor", "collector"]:
+                    for s in Database["schedule"][role]:
+                        if s[role] == id and s["datetime"].day == today.day and s["datetime"].month == today.month:
+                            if s["shift"] == "sáng" and time_in_range(MORNING_SHIFT[0], MORNING_SHIFT[1], today.time()):
+                                employee["state"] = "đang làm việc"
+                            if s["shift"] == "chiều" and time_in_range(AFTERNOON_SHIFT[0], AFTERNOON_SHIFT[1], today.time()):
+                                employee["state"] = "đang làm việc"
+                return employee
+        return None
     def selectAllJanitorReady(self, datetime, shift):
         empId = []
         for s in Database["schedule"]["janitor"]:
@@ -85,6 +99,13 @@ class DBMS:
     def selectMCPforView(self):
         data = [
             x for x in Database["mcp"]
+        ]
+        for d in data:
+            d["color"] = COLOR_GROUP[int(d["group"])]
+        return data
+    def selectMCPbyId(self, id):
+        data = [
+            x for x in Database["mcp"] if x["id"] == id
         ]
         for d in data:
             d["color"] = COLOR_GROUP[int(d["group"])]
@@ -116,6 +137,21 @@ class DBMS:
         return Database["schedule"]["collector"]    
     def selectRoute(self):
         return Database["route"]
+    def selectRouteById(self, id):
+        for r in  Database["route"]:
+            if r["id"] == id:
+                return r
+    def selectMCPinRouteId(self, routeid):
+        route = self.selectRouteById(routeid)
+        if route is None:
+            return []
+        else:
+            ret = []
+            for m in Database["mcp"]:
+                if m["id"] in route["mcpIDs"]:
+                    ret.append(m)
+            return ret
+            
     def selectUserProfile(self, id):
         for c in Database["employee"]:
             if c["id"] == id:
@@ -128,12 +164,14 @@ class DBMS:
                     if key in data:
                         c[key] = data[key]
     def assignJanitor2MCP(self, data):
+        cnt = 0
         for d in Database["employee"]:
             if d["id"] in data["janitor"]:
                 d["state"] = "đang làm việc"
+                cnt += 1
         for d in Database["mcp"]:
             if d["id"] in data["mcp"]:
-                d["available"] = 0
+                d["available"] -= cnt
         data = [
             { "mcp": data["mcp"][0], 
             "datetime": data["datetime"][0], 
@@ -172,7 +210,20 @@ class DBMS:
                         mcp['available'] += 1
                 Database["schedule"]["janitor"].remove(p)
                 break
-    
+    def removeWorkAssignedCollector2Route(self, pair):
+        print(Database["schedule"]["collector"])
+        print(pair)
+        for p in Database["schedule"]["collector"]:
+            if p["route"] == pair["route"] and p["collector"] == pair["collector"]:
+                for mem in Database["employee"]:
+                    if mem['id'] == pair["collector"]:
+                        mem['state'] = 'sẵn sàng'
+                        break
+                for route in Database["route"]:
+                    if route['id'] == pair["route"]:
+                        route['available'] += 1
+                Database["schedule"]["collector"].remove(p)
+                break
     def selectScheduleInDate(self, datetime):
         ret = {
             "janitor" : [],
@@ -201,5 +252,4 @@ class DBMS:
     def createNewAuth(self, data):
         # data = {"id" :"", "username": "", "password": "", "role": ""}
         Database["authentication"].append(data)
-
 dbms = DBMS()

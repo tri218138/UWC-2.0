@@ -99,14 +99,15 @@ def assignRoute():
                 }
                 dbms.assignCollector2Route(data)
         elif req["option"][0] == 'delete':
-            if "mcp" in req and "janitor" in req:
+            if "route" in req and "collector" in req:
                 pair = {
-                    "mcp" : req["mcp"][0], # mcpx
-                    "janitor" : req["janitor"][0], #312323
+                    "route" : req["route"][0], # route
+                    "collector" : req["collector"][0], #312323
+                    "vehicle" : req["vehicle"][0],
                     "datetime": datepicker, 
                     "shift" : shift
                 }
-                dbms.removeWorkAssignedJanitor2MCP(pair)
+                dbms.removeWorkAssignedCollector2Route(pair)
 
     data = {}
     data["route"] = dbms.selectRouteforAssign()

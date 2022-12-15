@@ -1,7 +1,7 @@
 from controllers.helper_function import COLOR_GROUP
 
 routeData = [
-    {'id': 'route0', 'mcpIDs': ['mcp0', 'mcp4', 'mcp2', 'mcp7'], 'color': COLOR_GROUP[1], 'available': 1, 'coordinates': [
+    {'id': 'route0', 'mcpIDs': ['mcp0', 'mcp6', 'mcp16', 'mcp15', 'mcp22', 'mcp3', 'mcp5', 'mcp23', 'mcp7', 'mcp2', 'mcp4'], 'color': COLOR_GROUP[1], 'available': 1, 'coordinates': [
         [106.8024652, 10.8790426],  # mcp0
         [106.8007701, 10.8830251],  # mcp6
         [106.799833, 10.8854318],  # mcp16
@@ -21,18 +21,8 @@ routeData = [
         [106.807379, 10.8805597], #mcp4
         [106.8046824, 10.8822711], #mcp22
         [106.8024652, 10.8790426],  # mcp0
-
-
-        # [106.80474, 10.88212],  # ngã tư 1
-        # [106.80624, 10.88437],  # ngã tư 2
-        # [106.8087309, 10.8826458],  # mcp2
-        # [106.8109852, 10.8813063],  # mcp7
-        # [106.8087309, 10.8826458],  # mcp2
-        # [106.80624, 10.88437],  # ngã tư 2
-        # [106.80474, 10.88212],  # ngã tư 1
-        # [106.8024652, 10.8790426],  # mcp0
     ]},
-    {'id': 'route1', 'mcpIDs': ['mcp0', 'mcp3', 'mcp5', 'mcp6'], 'color': COLOR_GROUP[2], 'available': 1, 'coordinates': [
+    {'id': 'route1', 'mcpIDs': ['mcp0', 'mcp1', 'mcp8', 'mcp9', 'mcp14', 'mcp11', 'mcp20', 'mcp10'], 'color': COLOR_GROUP[2], 'available': 1, 'coordinates': [
         [106.8024652, 10.8790426],  # mcp0
         [106.8031586, 10.87644811],  # comeback
         [106.8044608, 10.8763453],  # mcp1
@@ -51,7 +41,7 @@ routeData = [
         [106.8031586, 10.87644811],  # comeback
         [106.8024652, 10.8790426],  # mcp0
     ]},
-    {'id': 'route2', 'mcpIDs': ['mcp0', 'mcp3', 'mcp5', 'mcp6'], 'color': COLOR_GROUP[3], 'available': 1, 'coordinates': [
+    {'id': 'route2', 'mcpIDs': ['mcp0', 'mcp12', 'mcp19', 'mcp18', 'mcp21', 'mcp13', 'mcp17'], 'color': COLOR_GROUP[3], 'available': 1, 'coordinates': [
         [106.8024652, 10.8790426],  # mcp0
         [106.799238, 10.8790468],  # mcp12
         [106.7967002, 10.878731],  # mcp19

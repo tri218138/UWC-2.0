@@ -68,6 +68,7 @@
             <form action="{{request.path}}" method="post" id="pairID:{{i}}">
                 <input class="form-control form-control-sm" type="hidden" name="option" value="delete">
                 <input class="list-group-item-check pe-none" type="hidden" name="route" value='{{assigned[i]["route"]}}'>
+                <input class="list-group-item-check pe-none" type="hidden" name="vehicle" value='{{assigned[i]["vehicle"]}}'>
                 <input class="list-group-item-check pe-none" type="hidden" name="collector"
                     value='{{assigned[i]["collector"]}}'>
             </form>

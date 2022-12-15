@@ -22,9 +22,9 @@ def auth():
 # @login_required
 def home():
     header = render_template('layout/header.html')
-    sidebar = render_template('layout/sidebar.html', role="janitor")
-    content = render_template('layout/layout.html',
-                              header=header, sidebar=sidebar)
+    sidebar = render_template('layout/sidebar.html')
+    content = f"<h1>{getCurrentDateTime()}</h1>"
+    content = render_template('layout/layout.html', header=header, sidebar=sidebar, content=content)
     return render_template('index.html', content=content)
 
 @janitor_bp.route('/profile', methods=['GET','POST'])

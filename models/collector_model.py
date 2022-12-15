@@ -17,14 +17,27 @@ class DBMS:
                 for key in c:
                     if key in data:
                         c[key] = data[key]
-    def selectScheduleInDate(self, date):
-        ret = {}
-        ret["collector"] = []
-        for d in Database["schedule"]["collector"]:
-            if d["date"] == date:
-                ret["collector"].append(d)
-        return ret
+    def selectScheduleInDate(self, id, datetime):
+        ret = {
+            "janitor" : [],
+            "collector": []
+        }
 
+        myschedule = None
+        for d in Database["schedule"]["collector"]:
+            if d["collector"] == id  and d["datetime"].day == datetime.day and d["datetime"].month == datetime.month:
+                myschedule = d
+                break
+        if myschedule is None:
+            return ret
+        for d in Database["schedule"]["collector"]:
+            if d["route"] == myschedule["route"] and d["datetime"].day == datetime.day and d["datetime"].month == datetime.month:
+                ret["collector"].append(d)
+        # ret["janitor"] = []
+        # for d in Database["schedule"]["collector"]:
+        #     if d["datetime"].day == datetime.day and d["datetime"].month == datetime.month:
+        #         ret["collector"].append(d)
+        return ret
 
     def selectEmployee(self):
         pairWork = Database["employee"]
@@ -44,5 +57,18 @@ class DBMS:
         for c in Database["employee"]:
             if c["id"] == id:
                 return c    
-
+    def selectRouteById(self, id):
+        for r in  Database["route"]:
+            if r["id"] == id:
+                return r
+    def selectMCPinRouteId(self, routeid):
+        route = self.selectRouteById(routeid)
+        if route is None:
+            return []
+        else:
+            ret = []
+            for m in Database["mcp"]:
+                if m["id"] in route["mcpIDs"]:
+                    ret.append(m)
+            return ret
 dbms = DBMS()

@@ -28,3 +28,22 @@ def view():
     operator = render_template('components/mcp-operator.html', role = role)
     layout = render_template('layout/layout.html', header= header, sidebar=sidebar, operator=operator, content = content)
     return render_template('index.html', content=layout, role = role)
+
+@mcp_bp.route('/search', methods=['GET', 'POST'])
+def search():
+    role = request.blueprint.split('.')[0][:-3]
+    data = {
+        "mcp" : []
+    }
+    if request.method == 'GET':
+        req = request.args.to_dict()
+        if "id" in req:
+            data['mcp'] = dbms.selectMCPbyId(req["id"])
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html', role = role)
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html', role = role)
+    content = render_template('components/mcp.html', role = role, data= data)
+    operator = render_template('components/mcp-operator.html', role = role)
+    layout = render_template('layout/layout.html', header= header, sidebar=sidebar, operator=operator, content = content)
+    return render_template('index.html', content=layout, role = role)

@@ -86,16 +86,45 @@ def mcp():
             dbms.handleActionMcp(req_data)
     return redirect(url_for('backofficer_bp.mcp_bp.view'))
 
+@backofficer_bp.route('/route/search', methods=['GET', 'POST'])
+def routeSearch():
+    header = render_template('layout/header.html')
+    sidebar = render_template('layout/sidebar.html')
+    data = {
+        "route" : [],
+        "mcp": [],
+        "step": "route-search"
+    }
+    if request.method == 'GET':
+        req = request.args.to_dict()
+        if "id" in req:
+            data['route'] = [dbms.selectRouteById(req["id"])]
+            data["mcp"] = dbms.selectMCPinRouteId(req["id"])
+
+    mcp = render_template('components/mcp.html', data= data, step = data["step"])
+
+    operator = render_template('layout/operator.html', type='create-route', step=data["step"])
+    layout = render_template('layout/layout.html',header=header, sidebar=sidebar, content=mcp, operator= operator)
+    return render_template('index.html', content=layout)
 
 @backofficer_bp.route('/member', methods=['GET', 'POST'])
 def member():
-    data = dbms.selectEmployee()
+    data = {
+        "member": dbms.selectEmployee()
+    }
+    if request.method == 'GET':
+        req = request.args.to_dict()
+        if "request" in req:
+            if req["request"] == "search":
+                if "id" in req:
+                    member = dbms.selectEmployeeById(req["id"])
+                    if not member is None:
+                        data["member"] = [member]
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
-    content = render_template('components/member.html',
-                              role="backofficer", data=data)
-    layout = render_template('layout/layout.html',
-                             header=header, sidebar=sidebar, content=content)
+    operator = render_template('layout/operator.html', type='search-member')
+    content = render_template('components/member.html', role="backofficer", data=data)
+    layout = render_template('layout/layout.html', header=header, sidebar=sidebar, content=content, operator=operator)
     return render_template('index.html', content=layout)
 
 # #################################################
@@ -105,7 +134,7 @@ def assignTask():
     return redirect(url_for('backofficer_bp.task_bp.assign'))
 
 
-@backofficer_bp.route('/create-route', methods=['POST', 'GET'])
+@backofficer_bp.route('/route/create', methods=['POST', 'GET'])
 def createRoute():
     header = render_template('layout/header.html')
     sidebar = render_template('layout/sidebar.html')
@@ -162,9 +191,9 @@ def personalInfomation():
         req = request.form.to_dict()
         if req["request"] == "save":
             dbms.saveUserName(auth["username"], data=req)
-            return redirect(url_for("manager_bp.personalInfomation"))
+            return redirect(url_for("backofficer_bp.personalInfomation"))
         elif req["request"] == "cancel":
-            return redirect(url_for("manager_bp.personalInfomation"))
+            return redirect(url_for("backofficer_bp.personalInfomation"))
     content = render_template('layout/layout.html', header=header, container=container if container is not None else "")
     return render_template('index.html', content=content)  
 

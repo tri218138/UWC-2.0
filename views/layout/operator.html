@@ -1,31 +1,39 @@
 {% set role = request.blueprint.split('.')[0][:-3] %}
 <!-- {% print role %} # customer -->
-{% if role in ["backofficer"] %}
-{% if type == 'task-assign-mcp' %}
-<input type="submit" class="btn btn-primary btn-lg" form="assign-task-mcp" value="Lưu">
-{% endif %}
-{% if type == 'task-assign-route' %}
-<input type="submit" class="btn btn-primary btn-lg" form="assign-task-route" value="Lưu">
-{% endif %}
-{% if type == 'create-route' %}
-<form action="{{request.url}}" method="post" id="create-route">
-    {% if step == 'overview' %}
-    <input type="submit" style="opacity: 0;"  name="step" value="separate-field" id="separate-field">
-    <label for="separate-field" style="width: 100%" class="btn btn-primary btn-lg" >Chia vùng MCP</label>
-    {% elif step == 'separate-field' %}
-    <input type="submit" style="opacity: 0;"  name="step" value="find-optimized-route" id="find-optimized-route">
-    <label for="find-optimized-route" style="width: 100%" class="btn btn-primary btn-lg" >Tìm lộ trình tối ưu</label>
+{% if role in ["backofficer", "collector"] %}
+    {% if type == 'task-assign-mcp' %}
+        <input type="submit" class="btn btn-primary btn-lg" form="assign-task-mcp" value="Lưu">
     {% endif %}
-</form>
-{% endif %}
-{% endif %}
-{% if type == 'notification' %}
-<ul>
-    <li class="nav-item">
-        <a href="/{{role}}/notifi" class="btn btn-primary btn-block fa-lg mb-3">
 
-            <i class="fa-solid fa-truck"></i><span class="ms-1 d-none d-sm-inline">Thông báo MCPs đầy</span>
-        </a>
-    </li>
-</ul>
+    {% if type == 'task-assign-route' %}
+        <input type="submit" class="btn btn-primary btn-lg" form="assign-task-route" value="Lưu">
+    {% endif %}
+
+    {% if type == 'create-route' %}
+        <form action="{{request.url}}" method="post" id="create-route">
+            {% if step == 'overview' %}
+            <input type="submit" style="opacity: 0;"  name="step" value="separate-field" id="separate-field">
+            <label for="separate-field" style="width: 100%" class="btn btn-primary btn-lg" >Chia vùng MCP</label>
+            {% elif step == 'separate-field' %}
+            <input type="submit" style="opacity: 0;"  name="step" value="find-optimized-route" id="find-optimized-route">
+            <label for="find-optimized-route" style="width: 100%" class="btn btn-primary btn-lg" >Tìm lộ trình tối ưu</label>
+            {% endif %}
+        </form>
+    {% endif %}
+    {% if type == 'notification' %}
+        <ul>
+            <li class="nav-item">
+                <a href="/{{role}}/notifi" class="btn btn-primary btn-block fa-lg mb-3">
+                    <i class="fa-solid fa-truck"></i><span class="ms-1 d-none d-sm-inline">Thông báo MCPs đầy</span>
+                </a>
+            </li>
+        </ul>
+    {% endif %}
+    {% if type == 'search-member' %}
+        <form action="{{request.url}}" method="get" id="search-member">
+            <input type="hidden" style="opacity: 0;"  name="request" value="search">
+            <input type="text" name="id" required placeholder="Nhập id thành viên">
+            <input type="submit"  class="btn btn-primary btn-lg" value="Tìm">
+        </form>
+    {% endif %}
 {% endif %}
